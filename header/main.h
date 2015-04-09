@@ -3,6 +3,7 @@
 #include <string.h>
 #include <math.h>
 
+
 /////////////////////////////////////////////////////////////////////////////
 #define BG0_ENABLE 0x100
 #define BG1_ENABLE 0x200
@@ -123,6 +124,7 @@ unsigned short* SpriteData3 = SpriteData + 8192;
 #define SIZE_64             0xC000
 
 #include "sprites.h"
+#include "buttons.h"
 #include "font.h"
 
 void easy()
