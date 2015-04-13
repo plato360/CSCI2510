@@ -1,10 +1,18 @@
 #include "solder.h"
+#include "solder2.h"
+#include "solder3.h"
+#include "solder4.h"
+#include "solder5.h"
+#include "solder6.h"
+#include "solder7.h"
+
+int checka = 0;
 
 void easySprites();
 void defaultSprite(int num);
 void MoveSprite(int num);
 void setSpritePalette(const unsigned short *palette);
-void setSpriteData(const unsigned short *(Data));
+void setSpriteData(int num, const unsigned short *(Data));
 void runSprite();
 void UpdateSpriteMemory();
 int changeHealth(int health,int num);
@@ -15,10 +23,9 @@ int alive(int alive, int num);
 int godMode(int god, int num);
 int changeAI(int ai, int num);
 int moveSprite(int x, int y, int num);
-
-
-
-
+int changeAnimation(int animation, int num);
+int flipSprite(int flip, int num);
+int attack(int num);
 
 const unsigned short *palette;
 const unsigned short *Data;
@@ -53,6 +60,7 @@ typedef struct sprite
 	signed int rotate;
 	signed int scale;
 	int AI;
+	int animation;
 
 }spriteHandle;
 
@@ -62,7 +70,13 @@ void easySprites()
 {
 	int count = 0;
 	setSpritePalette(solderPalette);
-	setSpriteData(solderData);
+	setSpriteData(0,solderData);
+	setSpriteData(1,solder2Data);
+	setSpriteData(2,solder3Data);
+	setSpriteData(3,solder4Data);
+	setSpriteData(4,solder5Data);
+	setSpriteData(5,solder6Data);
+	setSpriteData(6,solder7Data);
 	for (count = 0; count < 128; count++)
 	{
 		defaultSprite(count);
@@ -88,6 +102,7 @@ void defaultSprite(int num)
 	mysprites[num].AI = 0;
 	mysprites[num].god = 0;
 	mysprites[num].health = 1;
+	mysprites[num].animation = 0;
 	MoveSprite(num);
 }
 
@@ -112,11 +127,11 @@ void setSpritePalette(const unsigned short *palette)
 
 
     //copy the sprite image into memory
-void setSpriteData(const unsigned short *Data)
+void setSpriteData(int num, const unsigned short *Data)
 {
 	int n = 0;
-    for(n = 0; n < 256*16; n++)
-        SpriteData[n] = Data[n];
+    for(n = 0; n < 256; n++)
+        SpriteData[n + (num*256)] = Data[n];
  
 }
 void UpdateSpriteMemory()
@@ -132,24 +147,55 @@ void UpdateSpriteMemory()
 void runSprite()
 {
     CheckButtons();
+    if(Pressed(BUTTON_A))
+    {
+        checka = 1;
+        attack(0);
+    }
+    else if( checka > 0)
+    {
+        checka = 0;
+        changeAnimation(0,0);
+    }
+    
     if(Pressed(BUTTON_LEFT))
     {
+        flipSprite(0,0);
+		if (mysprites[0].animation == 4)
+            changeAnimation(5,0);
+        else
+            changeAnimation(4,0);
 		if(mysprites[0].x > 0)
 			moveSprite(mysprites[0].x - 1, mysprites[0].y, 0);
 		
     }
     if(Pressed(BUTTON_RIGHT))
     {
+        flipSprite(1,0);
+        if (mysprites[0].animation == 4)
+            changeAnimation(5,0);
+        else
+		  changeAnimation(4,0);
 		if(mysprites[0].x + 16 < 240)
 			moveSprite(mysprites[0].x + 1, mysprites[0].y, 0);
     }
     if(Pressed(BUTTON_UP))
     {
+        flipSprite(1,0);
+		if (mysprites[0].animation == 1)
+            changeAnimation(2,0);
+        else
+		  changeAnimation(1,0);
 		if(mysprites[0].y > 0)
 			moveSprite(mysprites[0].x, mysprites[0].y - 1, 0);
     }
     if(Pressed(BUTTON_DOWN))
     {
+        flipSprite(0,0);
+		if (mysprites[0].animation == 1)
+            changeAnimation(2,0);
+        else
+		  changeAnimation(1,0);
 		if(mysprites[0].y + 16 < 160)
 			moveSprite(mysprites[0].x, mysprites[0].y + 1, 0);
     }
@@ -204,7 +250,39 @@ int moveSprite(int x, int y, int num)
 	mysprites[num].y = y;
 	return 0;
 }
+int changeAnimation(int animation, int num)
+{
+		sprites[num].attribute2 = 16 * animation;
+		mysprites[num].animation = animation;
+		return 0;
+}
+int flipSprite(int flip, int num)
+{
+    if (flip == 0)
+        sprites[num].attribute1 = sprites[num].attribute1 | 0x1000;
+    else if (flip == 1)
+    {
+        sprites[num].attribute1 = sprites[num].attribute1 & -0x1111;
+        sprites[num].attribute1 = sprites[num].attribute1 | 0x1000;
+        sprites[num].attribute1 = sprites[num].attribute1 & -0x1111;
+    }
+    else if (flip == 2);
+    else if (flip == 3);
+    return 0;
+}
 
+int attack(int num)
+{
+    if(mysprites[num].animation == 3 || mysprites[num].animation == 6);
+    else
+    {
+        if(mysprites[num].animation < 3)
+            changeAnimation(num*8 + 3,num);
+        else
+            changeAnimation(num*8 + 6,num);
+    }
+    return 0;
+}
 /*
 int wallChecker(int num)
 {

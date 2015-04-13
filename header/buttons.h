@@ -1,4 +1,3 @@
-
 void CheckButtons()
 {
     //store the status of the buttons in an array
