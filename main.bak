@@ -10,11 +10,11 @@ int main()
 {
 	Initialize();
 	LoadContent();
-	easy();            //located in main.h
+	easy();
 	while(1)
 	{
-	    runSprite();          //moves sprite accross the screen
-	    UpdateSpriteMemory(); //updates OAM
+	    runSprite();
+	    UpdateSpriteMemory();
 		Update();
 		Draw();
 	}

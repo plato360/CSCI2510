@@ -1,3 +1,4 @@
+typedef unsigned short u16;
 #include "solder.h"
 
 void easySprites();
@@ -7,18 +8,6 @@ void setSpritePalette(const unsigned short *palette);
 void setSpriteData(const unsigned short *(Data));
 void runSprite();
 void UpdateSpriteMemory();
-int changeHealth(int health,int num);
-int changeSpeed(int speed, int num);
-int changeAttack(int attack, int num);
-int changeDefense(int defense, int num);
-int alive(int alive, int num);
-int godMode(int god, int num);
-int changeAI(int ai, int num);
-int moveSprite(int x, int y, int num);
-
-
-
-
 
 const unsigned short *palette;
 const unsigned short *Data;
@@ -79,9 +68,10 @@ void easySprites()
 void defaultSprite(int num)
 {
 	mysprites[num].alive = 1;
-	mysprites[num].size = 16;
+//	mysprites[num].size = size;
 	mysprites[num].x = 160;
 	mysprites[num].y = 240;
+	mysprites[num].size = 1;
 	mysprites[num].moveSpeed = 1;
 	mysprites[num].attack = 1;
 	mysprites[num].defense = 1;
@@ -134,104 +124,21 @@ void runSprite()
     CheckButtons();
     if(Pressed(BUTTON_LEFT))
     {
-		if(mysprites[0].x > 0)
-			moveSprite(mysprites[0].x - 1, mysprites[0].y, 0);
-		
+        mysprites[0].x--;
     }
+    activebutton(BUTTON_LEFT);
     if(Pressed(BUTTON_RIGHT))
     {
-		if(mysprites[0].x + 16 < 240)
-			moveSprite(mysprites[0].x + 1, mysprites[0].y, 0);
+        mysprites[0].x++;
     }
+    activebutton(BUTTON_RIGHT);
     if(Pressed(BUTTON_UP))
     {
-		if(mysprites[0].y > 0)
-			moveSprite(mysprites[0].x, mysprites[0].y - 1, 0);
+        mysprites[0].y--;
     }
     if(Pressed(BUTTON_DOWN))
     {
-		if(mysprites[0].y + 16 < 160)
-			moveSprite(mysprites[0].x, mysprites[0].y + 1, 0);
+        mysprites[0].y++;
     }
 	MoveSprite(0);
 }
-
-int changeHealth(int health, int num)
-{
-	mysprites[num].health = mysprites[num].health + health;
-	return 0;
-}
-
-int changeSpeed(int speed, int num)
-{
-	mysprites[num].moveSpeed = speed;
-	return 0;
-}
-
-int changeAttack(int attack, int num)
-{
-	mysprites[num].attack = attack;
-	return 0;
-}
-
-int changeDefense(int defense, int num)
-{
-	mysprites[num].defense = defense;
-	return 0;
-}
-
-int alive(int alive, int num)
-{
-	mysprites[num].alive = alive;
-	return 0;
-}
-
-int godMode(int god, int num)
-{
-	mysprites[num].god = god;
-	return 0;
-}
-
-int changeAI(int ai, int num)
-{
-	mysprites[num].AI = ai;
-	return 0;
-}
-
-int moveSprite(int x, int y, int num)
-{
-	mysprites[num].x = x;
-	mysprites[num].y = y;
-	return 0;
-}
-
-/*
-int wallChecker(int num)
-{
-	if(BUTTON_LEFT)
-		if(isWall(mysprites[num].x - 1))
-			return 1;
-		
-	if(Pressed(BUTTON_RIGHT))
-		if(isWall(mysprites[num].x + 1))
-			return 1;
-		
-    if(Pressed(BUTTON_UP))
-		if(isWall(mysprites[num].y - 1))
-			return 1;
-		
-    if(Pressed(BUTTON_DOWN))
-		if(isWall(mysprites[num].y + 1))
-			return 1;
-	return 0;
-}
-int isWall(int test)
-{
-	if(wallMap[test])
-		return 1;
-	else
-		return 0;
-}
-
-//void createWall(){}
-*/
