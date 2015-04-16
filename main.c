@@ -10,11 +10,9 @@ int main()
 {
 	Initialize();
 	LoadContent();
-	easy();            //located in main.h
 	while(1)
 	{
-	    runSprite();          //moves sprite accross the screen
-	    UpdateSpriteMemory(); //updates OAM
+	    
 		Update();
 		Draw();
 	}
@@ -22,25 +20,33 @@ int main()
 
 void Initialize() //Initializes variables
 {
-    gameState = STATE_TITLE;
+    gameState = STATE_INGAME;
+   	easy();            //located in main.h
 }
 
 void LoadContent() //Loads the initial content
 {
     if (gameState == STATE_TITLE)
         LoadInitialTitleScreen();
+    
 }
 
 void Update() //Detect Button Presses and Update Info
 {
     if (gameState == STATE_TITLE)
         UpdateTitleScreen();
+    else if (gameState == STATE_INGAME) {
+        runSprite();          //moves sprite accross the screen
+    }
 }
 
 void Draw() //Draw updates to the screen
 {
     if (gameState == STATE_TITLE)
         DrawTitleScreen();
+    else if (gameState == STATE_INGAME) {
+        UpdateSpriteMemory(); //updates OAM
+    }
 }
 
 

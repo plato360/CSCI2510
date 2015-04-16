@@ -25,8 +25,6 @@ void easy()
 {	
 	//set video mode 0 with background 0
 	SetMode(0 | BG0_ENABLE | BG1_ENABLE | BG2_ENABLE | BG3_ENABLE | OBJ_ENABLE | OBJ_MAP_1D);
-
-
 	easySprites();
 }
 

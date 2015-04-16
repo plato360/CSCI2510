@@ -3740,12 +3740,9 @@ main:
 	ldr	r2, .L169+4
 	mov	lr, pc
 	bx	r2
-	bl	easy
 	ldr	r5, .L169+8
 	ldr	r4, .L169+12
 .L168:
-	bl	runSprite
-	bl	UpdateSpriteMemory
 	mov	lr, pc
 	bx	r5
 	mov	lr, pc
@@ -3768,10 +3765,10 @@ Initialize:
 	@ frame_needed = 0, uses_anonymous_args = 0
 	@ link register save eliminated.
 	ldr	r3, .L172
-	mov	r2, #0
+	mov	r2, #1
 	@ lr needed for prologue
 	str	r2, [r3, #0]	@  gameState
-	bx	lr
+	b	easy
 .L173:
 	.align	2
 .L172:
@@ -3804,15 +3801,19 @@ Update:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	@ link register save eliminated.
-	ldr	r3, .L180
-	ldr	r2, [r3, #0]	@  gameState
-	cmp	r2, #0
+	ldr	r3, .L182
+	ldr	r3, [r3, #0]	@  gameState
+	cmp	r3, #0
 	@ lr needed for prologue
-	bxne	lr
+	bne	.L179
 	b	UpdateTitleScreen
-.L181:
+.L179:
+	cmp	r3, #1
+	bxne	lr
+	b	runSprite
+.L183:
 	.align	2
-.L180:
+.L182:
 	.word	gameState
 	.size	Update, .-Update
 	.align	2
@@ -3823,15 +3824,19 @@ Draw:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	@ link register save eliminated.
-	ldr	r3, .L184
-	ldr	r2, [r3, #0]	@  gameState
-	cmp	r2, #0
+	ldr	r3, .L188
+	ldr	r3, [r3, #0]	@  gameState
+	cmp	r3, #0
 	@ lr needed for prologue
-	bxne	lr
+	bne	.L185
 	b	DrawTitleScreen
 .L185:
+	cmp	r3, #1
+	bxne	lr
+	b	UpdateSpriteMemory
+.L189:
 	.align	2
-.L184:
+.L188:
 	.word	gameState
 	.size	Draw, .-Draw
 	.comm	gameState, 4, 32
