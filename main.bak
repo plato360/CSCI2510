@@ -12,7 +12,6 @@ int main()
 	LoadContent();
 	while(1)
 	{
-	    
 		Update();
 		Draw();
 	}
@@ -35,7 +34,7 @@ void Update() //Detect Button Presses and Update Info
 {
     if (gameState == STATE_TITLE)
         UpdateTitleScreen();
-    else if (gameState == STATE_INGAME) }
+    else if (gameState == STATE_INGAME) {
         runSprite();          //moves sprite accross the screen
     }
 }

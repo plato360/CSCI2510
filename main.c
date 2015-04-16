@@ -12,7 +12,6 @@ int main()
 	LoadContent();
 	while(1)
 	{
-	    
 		Update();
 		Draw();
 	}
@@ -42,6 +41,7 @@ void Update() //Detect Button Presses and Update Info
 
 void Draw() //Draw updates to the screen
 {
+    WaitVBlank();
     if (gameState == STATE_TITLE)
         DrawTitleScreen();
     else if (gameState == STATE_INGAME) {

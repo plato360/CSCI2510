@@ -167,11 +167,3 @@ unsigned short* SpriteData3 = SpriteData + 8192;
 volatile unsigned int *BUTTONS = (volatile unsigned int *)0X4000130; //button pointer
 short buttons[10]; //button status
 
-
-#define REG_VCOUNT *(volatile unsigned short*)0x04000006
-void WaitVBlank(void)
-{
-	while(REG_VCOUNT >= 160);
-	while(REG_VCOUNT < 160);
-}
-
