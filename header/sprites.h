@@ -376,6 +376,17 @@ int AI_follow(int num)
     else
         mysprites[num].y++;
         
+    if(abs(mysprites[num].x - mysprites[0].x) < 10 && abs(mysprites[num].y - mysprites[0].y) < 10)
+    {
+        if(mysprites[num].animation == 3)
+            changeAnimation(0,2);
+        else
+            changeAnimation(3,2);
+		
+        //attack(2);
+    }
+    else
+        changeAnimation(0,2);
     MoveSprite(num);
     
     return 0;

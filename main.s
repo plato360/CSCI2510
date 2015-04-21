@@ -3801,37 +3801,63 @@ AI_follow:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 1, uses_anonymous_args = 0
 	mov	ip, sp
-	stmfd	sp!, {fp, ip, lr, pc}
-	mov	lr, r0, asl #3	@  num
+	stmfd	sp!, {r4, fp, ip, lr, pc}
+	mov	r4, r0	@  num
 	sub	fp, ip, #4
-	ldr	ip, .L189
-	add	r3, lr, r0	@  num
-	add	r1, ip, r3, asl #3
+	ldr	r0, .L196
+	mov	ip, r4, asl #3	@  num
+	add	r3, ip, r4	@  num
+	add	r1, r0, r3, asl #3
 	ldr	r2, [r1, #24]	@  <variable>.x
-	ldr	r3, [ip, #24]	@  <variable>.x
+	ldr	r3, [r0, #24]	@  <variable>.x
 	rsb	r3, r3, r2
 	cmp	r3, #0
-	sub	r3, r2, #1
-	strgt	r3, [r1, #24]	@  <variable>.x
-	add	r3, lr, r0	@  num
-	add	r3, ip, r3, asl #3
-	add	r2, r2, #1
-	strle	r2, [r1, #24]	@  <variable>.x
-	ldr	r1, [r3, #28]	@  <variable>.y
-	ldr	r2, [ip, #28]	@  <variable>.y
-	rsb	r2, r2, r1
-	cmp	r2, #0
-	sub	r2, r1, #1
-	add	r1, r1, #1
-	strgt	r2, [r3, #28]	@  <variable>.y
-	strle	r1, [r3, #28]	@  <variable>.y
+	subgt	r3, r2, #1
+	addle	r3, r2, #1
+	str	r3, [r1, #24]	@  <variable>.x
+	add	r3, ip, r4	@  num
+	add	r1, r0, r3, asl #3
+	ldr	r2, [r1, #28]	@  <variable>.y
+	ldr	r3, [r0, #28]	@  <variable>.y
+	rsb	r3, r3, r2
+	cmp	r3, #0
+	subgt	r3, r2, #1
+	addle	r3, r2, #1
+	str	r3, [r1, #28]	@  <variable>.y
+	add	r3, ip, r4	@  num
+	add	r1, r0, r3, asl #3
+	ldr	r2, [r1, #24]	@  <variable>.x
+	ldr	r3, [r0, #24]	@  <variable>.x
+	rsb	r2, r3, r2
+	add	r2, r2, #9
+	cmp	r2, #18
+	bhi	.L189
+	ldr	r2, [r0, #28]	@  <variable>.y
+	ldr	r3, [r1, #28]	@  <variable>.y
+	rsb	r3, r2, r3
+	add	r3, r3, #9
+	cmp	r3, #18
+	bhi	.L189
+	ldr	r3, [r1, #68]	@  <variable>.animation
+	cmp	r3, #3
+	moveq	r1, #2
+	moveq	r0, #0
+	movne	r1, #2
+	movne	r0, #3
+.L195:
+	bl	changeAnimation
+	mov	r0, r4	@  num
 	bl	MoveSprite
 	mov	r0, #0
-	ldmea	fp, {fp, sp, lr}
+	ldmea	fp, {r4, fp, sp, lr}
 	bx	lr
-.L190:
-	.align	2
 .L189:
+	mov	r0, #0
+	mov	r1, #2
+	b	.L195
+.L197:
+	.align	2
+.L196:
 	.word	mysprites
 	.size	AI_follow, .-AI_follow
 	.align	2
@@ -3884,24 +3910,24 @@ main:
 	@ frame_needed = 1, uses_anonymous_args = 0
 	mov	ip, sp
 	stmfd	sp!, {r4, r5, fp, ip, lr, pc}
-	ldr	r3, .L199
+	ldr	r3, .L206
 	sub	fp, ip, #4
 	mov	lr, pc
 	bx	r3
-	ldr	r2, .L199+4
+	ldr	r2, .L206+4
 	mov	lr, pc
 	bx	r2
-	ldr	r5, .L199+8
-	ldr	r4, .L199+12
-.L198:
+	ldr	r5, .L206+8
+	ldr	r4, .L206+12
+.L205:
 	mov	lr, pc
 	bx	r5
 	mov	lr, pc
 	bx	r4
-	b	.L198
-.L200:
+	b	.L205
+.L207:
 	.align	2
-.L199:
+.L206:
 	.word	Initialize
 	.word	LoadContent
 	.word	Update
@@ -3915,14 +3941,14 @@ Initialize:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	@ link register save eliminated.
-	ldr	r3, .L202
+	ldr	r3, .L209
 	mov	r2, #1
 	@ lr needed for prologue
 	str	r2, [r3, #0]	@  gameState
 	b	easy
-.L203:
+.L210:
 	.align	2
-.L202:
+.L209:
 	.word	gameState
 	.size	Initialize, .-Initialize
 	.align	2
@@ -3933,15 +3959,15 @@ LoadContent:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	@ link register save eliminated.
-	ldr	r3, .L206
+	ldr	r3, .L213
 	ldr	r2, [r3, #0]	@  gameState
 	cmp	r2, #0
 	@ lr needed for prologue
 	bxne	lr
 	b	LoadInitialTitleScreen
-.L207:
+.L214:
 	.align	2
-.L206:
+.L213:
 	.word	gameState
 	.size	LoadContent, .-LoadContent
 	.align	2
@@ -3953,22 +3979,22 @@ Update:
 	@ frame_needed = 1, uses_anonymous_args = 0
 	mov	ip, sp
 	stmfd	sp!, {r4, r5, fp, ip, lr, pc}
-	ldr	r3, .L214
+	ldr	r3, .L221
 	sub	fp, ip, #4
 	sub	sp, sp, #4
 	ldr	r4, [r3, #0]	@  gameState
 	cmp	r4, #0
-	bne	.L209
+	bne	.L216
 	ldmea	fp, {r4, r5, fp, sp, lr}
 	b	UpdateTitleScreen
-.L209:
+.L216:
 	cmp	r4, #1
-	ldr	r5, .L214+4
-	beq	.L213
-.L208:
+	ldr	r5, .L221+4
+	beq	.L220
+.L215:
 	ldmea	fp, {r4, r5, fp, sp, lr}
 	bx	lr
-.L213:
+.L220:
 	bl	runSprite
 	mov	r0, #0
 	mov	r3, r0
@@ -3981,14 +4007,14 @@ Update:
 	cmp	r3, #5
 	mov	r0, #2
 	str	r3, [r5, #0]	@  aicount
-	ble	.L208
+	ble	.L215
 	bl	AI_follow
 	mov	r3, #0
 	str	r3, [r5, #0]	@  aicount
-	b	.L208
-.L215:
+	b	.L215
+.L222:
 	.align	2
-.L214:
+.L221:
 	.word	gameState
 	.word	aicount
 	.size	Update, .-Update
@@ -4003,23 +4029,23 @@ Draw:
 	stmfd	sp!, {fp, ip, lr, pc}
 	sub	fp, ip, #4
 	bl	WaitVBlank
-	ldr	r3, .L221
+	ldr	r3, .L228
 	ldr	r3, [r3, #0]	@  gameState
 	cmp	r3, #0
-	bne	.L217
+	bne	.L224
 	ldmea	fp, {fp, sp, lr}
 	b	DrawTitleScreen
-.L217:
+.L224:
 	cmp	r3, #1
-	beq	.L220
+	beq	.L227
 	ldmea	fp, {fp, sp, lr}
 	bx	lr
-.L220:
+.L227:
 	ldmea	fp, {fp, sp, lr}
 	b	UpdateSpriteMemory
-.L222:
+.L229:
 	.align	2
-.L221:
+.L228:
 	.word	gameState
 	.size	Draw, .-Draw
 	.comm	gameState, 4, 32
