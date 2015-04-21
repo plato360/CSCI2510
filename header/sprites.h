@@ -7,7 +7,6 @@
 #include "solder7.h"
 
 int checka = 0;
-
 void easySprites();
 void defaultSprite(int num);
 void MoveSprite(int num);
@@ -27,9 +26,14 @@ int changeAnimation(int animation, int num);
 int flipSprite(int flip, int num);
 int attack(int num);
 
+int AI_Patrol(int x1, int y1, int x2, int y2, int num);
+int AI_follow(int num);
+int AI_followWall(int num);
+
 const unsigned short *palette;
 const unsigned short *Data;
 //an entry for object attribute memory (OAM)
+//#include "AILogic.c"
 
 typedef struct tagSprite
 {
@@ -54,6 +58,7 @@ typedef struct sprite
 	int y;
 	int dirx;
 	int diry;
+	int flip;
 	int colormode;
 	int trans;
 	int god;
@@ -87,6 +92,10 @@ void easySprites()
 	}
 	mysprites[0].x = 40;
 	mysprites[0].y = 40;
+	mysprites[1].x = 0;
+	mysprites[1].y = 20;
+	mysprites[2].x = 150;
+	mysprites[2].y = 0;
 	UpdateSpriteMemory();
 }
 
@@ -313,3 +322,74 @@ int isWall(int test)
 
 //void createWall(){}
 */
+
+int AI_Patrol(int x1, int y1, int x2, int y2, int num)
+{
+	if (y2 == 0)
+	{
+		if (mysprites[num].flip == 0)
+		{
+			mysprites[num].x++;
+			mysprites[num].y = y1;
+			if (mysprites[num].x >= x2)
+				mysprites[num].flip = 1;
+		}
+		else
+		{
+			mysprites[num].x--;
+			mysprites[num].y = y1;
+			if (mysprites[num].x <= x1)
+				mysprites[num].flip = 0;
+		}
+	}
+	else
+	{
+		if (mysprites[num].flip == 0)
+		{
+			mysprites[num].y++;
+			mysprites[num].x = x1;
+			if (mysprites[num].y >= y2)
+				mysprites[num].flip = 1;
+		}
+		else
+		{
+			mysprites[num].y--;
+			mysprites[num].x = x1;
+			if (mysprites[num].y <= y1)
+				mysprites[num].flip = 0;
+		}
+	}
+	MoveSprite(num);
+		
+	return 0;
+}
+
+int AI_follow(int num)
+{
+    if (mysprites[num].x - mysprites[0].x > 0)
+        mysprites[num].x--;
+    else
+        mysprites[num].x++;
+        
+    if (mysprites[num].y - mysprites[0].y > 0)
+        mysprites[num].y--;
+    else
+        mysprites[num].y++;
+        
+    MoveSprite(num);
+    
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -6,6 +6,8 @@ void LoadContent(void);
 void Update(void);
 void Draw(void);
 
+int aicount = 0;
+
 int main()
 {
 	Initialize();
@@ -36,6 +38,13 @@ void Update() //Detect Button Presses and Update Info
         UpdateTitleScreen();
     else if (gameState == STATE_INGAME) {
         runSprite();          //moves sprite accross the screen
+		AI_Patrol(0, 20, 120, 0, 1);
+		aicount++;
+        if(aicount > 5)
+        {
+		  AI_follow(2);
+		  aicount = 0;
+        }
     }
 }
 

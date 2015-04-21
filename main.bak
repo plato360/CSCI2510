@@ -36,11 +36,14 @@ void Update() //Detect Button Presses and Update Info
         UpdateTitleScreen();
     else if (gameState == STATE_INGAME) {
         runSprite();          //moves sprite accross the screen
+		AI_Patrol(0, 20, 120, 0, 1);
+		AI_follow(2);
     }
 }
 
 void Draw() //Draw updates to the screen
 {
+    WaitVBlank();
     if (gameState == STATE_TITLE)
         DrawTitleScreen();
     else if (gameState == STATE_INGAME) {
