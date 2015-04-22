@@ -6,6 +6,8 @@ void LoadContent(void);
 void Update(void);
 void Draw(void);
 
+int aicount = 0;
+
 int main()
 {
 	Initialize();
@@ -21,6 +23,7 @@ void Initialize() //Initializes variables
 {
     gameState = STATE_INGAME;
    	easy();            //located in main.h
+   	sound();
 }
 
 void LoadContent() //Loads the initial content
@@ -37,7 +40,12 @@ void Update() //Detect Button Presses and Update Info
     else if (gameState == STATE_INGAME) {
         runSprite();          //moves sprite accross the screen
 		AI_Patrol(0, 20, 120, 0, 1);
-		AI_follow(2);
+		aicount++;
+        if(aicount > 5)
+        {
+		  AI_follow(2);
+		  aicount = 0;
+        }
     }
 }
 

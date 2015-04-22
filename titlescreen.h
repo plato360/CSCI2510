@@ -5,7 +5,6 @@ void DrawTitleScreen(void);
 //Loads the initial title screen
 void LoadInitialTitleScreen()
 {
-    
 }
 
 //Updates title screen data based on keyboard inputs

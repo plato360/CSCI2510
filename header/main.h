@@ -7,6 +7,7 @@
 #include "buttons.h"
 #include "font.h"
 #include "sprites.h"
+#include "sound.h"
 
 
 
