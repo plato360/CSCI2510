@@ -3100,19 +3100,23 @@ easySprites:
 	strh	r8, [r3, #4]	@ movhi 	@  count,  <variable>.attribute2
 	strh	r6, [r3, #2]	@ movhi 	@  <variable>.attribute1
 	ble	.L54
-	ldr	r1, .L57+48
+	ldr	r3, .L57+48
+	mov	r2, #1
+	str	r2, [r3, #148]	@  <variable>.health
+	mov	r2, #10
 	mov	r0, #40
-	mov	r3, #20
+	str	r2, [r3, #4]	@  <variable>.health
+	mov	r1, #20
 	mov	r2, #150
-	str	r3, [r1, #100]	@  <variable>.y
-	str	r8, [r1, #172]	@  count,  <variable>.y
-	str	r0, [r1, #28]	@  <variable>.y
-	str	r2, [r1, #168]	@  <variable>.x
-	str	r0, [r1, #24]	@  <variable>.x
-	str	r8, [r1, #96]	@  count,  <variable>.x
-	ldr	r3, .L57+52
+	str	r2, [r3, #168]	@  <variable>.x
+	str	r0, [r3, #28]	@  <variable>.y
+	str	r1, [r3, #100]	@  <variable>.y
+	str	r8, [r3, #172]	@  count,  <variable>.y
+	str	r0, [r3, #24]	@  <variable>.x
+	str	r8, [r3, #96]	@  count,  <variable>.x
+	ldr	r2, .L57+52
 	mov	lr, pc
-	bx	r3
+	bx	r2
 	ldmea	fp, {r4, r5, r6, r7, r8, sl, fp, sp, lr}
 	bx	lr
 .L58:
@@ -3290,50 +3294,53 @@ runSprite:
 	@ frame_needed = 1, uses_anonymous_args = 0
 	mov	ip, sp
 	stmfd	sp!, {r4, fp, ip, lr, pc}
+	ldr	r4, .L121
 	sub	fp, ip, #4
 	bl	CheckButtons
+	ldr	r3, [r4, #20]	@  <variable>.alive
+	cmp	r3, #0
+	ble	.L92
 	mov	r0, #1
 	bl	Pressed
 	cmp	r0, #0
 	mov	r2, r0
-	bne	.L115
-	ldr	ip, .L120
+	bne	.L116
+	ldr	ip, .L121+4
 	ldr	r3, [ip, #0]	@  checka
 	cmp	r3, #0
 	movgt	r1, r0
 	strgt	r2, [ip, #0]	@  checka
-	ldrgt	r3, .L120+4
+	ldrgt	r3, .L121+8
 	movgt	lr, pc
 	bxgt	r3
-.L93:
+.L94:
 	mov	r0, #32
 	bl	Pressed
 	cmp	r0, #0
-	bne	.L116
-.L95:
+	bne	.L117
+.L96:
 	mov	r0, #16
 	bl	Pressed
 	cmp	r0, #0
-	bne	.L117
-.L99:
+	bne	.L118
+.L100:
 	mov	r0, #64
 	bl	Pressed
 	cmp	r0, #0
-	bne	.L118
-.L103:
+	bne	.L119
+.L104:
 	mov	r0, #128
 	bl	Pressed
 	cmp	r0, #0
-	bne	.L119
-.L107:
+	bne	.L120
+.L92:
 	mov	r0, #0
 	ldmea	fp, {r4, fp, sp, lr}
 	b	MoveSprite
-.L119:
+.L120:
 	mov	r0, #0
-	ldr	r4, .L120+8
 	mov	r1, r0
-	ldr	r3, .L120+12
+	ldr	r3, .L121+12
 	mov	lr, pc
 	bx	r3
 	ldr	r2, [r4, #68]	@  <variable>.animation
@@ -3342,24 +3349,23 @@ runSprite:
 	movne	r1, #0
 	moveq	r0, #2
 	movne	r0, #1
-	ldr	r3, .L120+4
+	ldr	r3, .L121+8
 	mov	lr, pc
 	bx	r3
 	ldr	r1, [r4, #28]	@  <variable>.y
 	add	r3, r1, #16
 	cmp	r3, #159
-	bgt	.L107
+	bgt	.L92
 	ldr	r0, [r4, #24]	@  <variable>.x
 	add	r1, r1, #1
 	mov	r2, #0
-	ldr	r3, .L120+16
+	ldr	r3, .L121+16
 	mov	lr, pc
 	bx	r3
-	b	.L107
-.L118:
-	ldr	r4, .L120+8
+	b	.L92
+.L119:
 	mov	r1, #0
-	ldr	r3, .L120+12
+	ldr	r3, .L121+12
 	mov	r0, #1
 	mov	lr, pc
 	bx	r3
@@ -3369,23 +3375,22 @@ runSprite:
 	movne	r1, #0
 	moveq	r0, #2
 	movne	r0, #1
-	ldr	r3, .L120+4
+	ldr	r3, .L121+8
 	mov	lr, pc
 	bx	r3
 	ldr	r1, [r4, #28]	@  <variable>.y
 	cmp	r1, #0
-	ble	.L103
+	ble	.L104
 	ldr	r0, [r4, #24]	@  <variable>.x
 	sub	r1, r1, #1
 	mov	r2, #0
-	ldr	r3, .L120+16
+	ldr	r3, .L121+16
 	mov	lr, pc
 	bx	r3
-	b	.L103
-.L117:
-	ldr	r4, .L120+8
+	b	.L104
+.L118:
 	mov	r1, #0
-	ldr	r3, .L120+12
+	ldr	r3, .L121+12
 	mov	r0, #1
 	mov	lr, pc
 	bx	r3
@@ -3395,25 +3400,24 @@ runSprite:
 	moveq	r0, #5
 	movne	r0, #4
 	movne	r1, #0
-	ldr	r3, .L120+4
+	ldr	r3, .L121+8
 	mov	lr, pc
 	bx	r3
 	ldr	r0, [r4, #24]	@  <variable>.x
 	add	r3, r0, #16
 	cmp	r3, #239
-	bgt	.L99
+	bgt	.L100
 	ldr	r1, [r4, #28]	@  <variable>.y
 	add	r0, r0, #1
 	mov	r2, #0
-	ldr	r3, .L120+16
+	ldr	r3, .L121+16
 	mov	lr, pc
 	bx	r3
-	b	.L99
-.L116:
+	b	.L100
+.L117:
 	mov	r0, #0
-	ldr	r4, .L120+8
 	mov	r1, r0
-	ldr	r3, .L120+12
+	ldr	r3, .L121+12
 	mov	lr, pc
 	bx	r3
 	ldr	r2, [r4, #68]	@  <variable>.animation
@@ -3422,37 +3426,37 @@ runSprite:
 	moveq	r0, #5
 	movne	r0, #4
 	movne	r1, #0
-	ldr	r3, .L120+4
+	ldr	r3, .L121+8
 	mov	lr, pc
 	bx	r3
 	ldr	r0, [r4, #24]	@  <variable>.x
 	cmp	r0, #0
-	ble	.L95
+	ble	.L96
 	ldr	r1, [r4, #28]	@  <variable>.y
 	sub	r0, r0, #1
 	mov	r2, #0
-	ldr	r3, .L120+16
+	ldr	r3, .L121+16
 	mov	lr, pc
 	bx	r3
-	b	.L95
-.L115:
-	ldr	r2, .L120
+	b	.L96
+.L116:
+	ldr	r2, .L121+4
 	mov	r3, #1
 	str	r3, [r2, #0]	@  checka
-	ldr	r1, .L120+20
+	ldr	r1, .L121+20
 	mov	r0, #0
 	mov	lr, pc
 	bx	r1
-	b	.L93
-.L121:
+	b	.L94
+.L122:
 	.align	2
-.L120:
+.L121:
+	.word	mysprites
 	.word	checka
 	.word	changeAnimation
-	.word	mysprites
 	.word	flipSprite
 	.word	moveSprite
-	.word	attack
+	.word	attack2
 	.size	runSprite, .-runSprite
 	.align	2
 	.global	changeHealth
@@ -3462,7 +3466,7 @@ changeHealth:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	@ link register save eliminated.
-	ldr	r2, .L123
+	ldr	r2, .L124
 	add	r1, r1, r1, asl #3	@  num,  num
 	add	r2, r2, r1, asl #3
 	ldr	r3, [r2, #4]	@  <variable>.health
@@ -3471,9 +3475,9 @@ changeHealth:
 	@ lr needed for prologue
 	str	r3, [r2, #4]	@  <variable>.health
 	bx	lr
-.L124:
+.L125:
 	.align	2
-.L123:
+.L124:
 	.word	mysprites
 	.size	changeHealth, .-changeHealth
 	.align	2
@@ -3484,16 +3488,16 @@ changeSpeed:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	@ link register save eliminated.
-	ldr	r3, .L126
+	ldr	r3, .L127
 	add	r1, r1, r1, asl #3	@  num,  num
 	add	r3, r3, r1, asl #3
 	str	r0, [r3, #8]	@  speed,  <variable>.moveSpeed
 	mov	r0, #0
 	@ lr needed for prologue
 	bx	lr
-.L127:
+.L128:
 	.align	2
-.L126:
+.L127:
 	.word	mysprites
 	.size	changeSpeed, .-changeSpeed
 	.align	2
@@ -3504,16 +3508,16 @@ changeAttack:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	@ link register save eliminated.
-	ldr	r3, .L129
+	ldr	r3, .L130
 	add	r1, r1, r1, asl #3	@  num,  num
 	add	r3, r3, r1, asl #3
 	str	r0, [r3, #12]	@  attack,  <variable>.attack
 	mov	r0, #0
 	@ lr needed for prologue
 	bx	lr
-.L130:
+.L131:
 	.align	2
-.L129:
+.L130:
 	.word	mysprites
 	.size	changeAttack, .-changeAttack
 	.align	2
@@ -3524,16 +3528,16 @@ changeDefense:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	@ link register save eliminated.
-	ldr	r3, .L132
+	ldr	r3, .L133
 	add	r1, r1, r1, asl #3	@  num,  num
 	add	r3, r3, r1, asl #3
 	str	r0, [r3, #16]	@  defense,  <variable>.defense
 	mov	r0, #0
 	@ lr needed for prologue
 	bx	lr
-.L133:
+.L134:
 	.align	2
-.L132:
+.L133:
 	.word	mysprites
 	.size	changeDefense, .-changeDefense
 	.align	2
@@ -3544,16 +3548,16 @@ alive:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	@ link register save eliminated.
-	ldr	r3, .L135
+	ldr	r3, .L136
 	add	r1, r1, r1, asl #3	@  num,  num
 	add	r3, r3, r1, asl #3
 	str	r0, [r3, #20]	@  alive,  <variable>.alive
 	mov	r0, #0
 	@ lr needed for prologue
 	bx	lr
-.L136:
+.L137:
 	.align	2
-.L135:
+.L136:
 	.word	mysprites
 	.size	alive, .-alive
 	.align	2
@@ -3564,16 +3568,16 @@ godMode:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	@ link register save eliminated.
-	ldr	r3, .L138
+	ldr	r3, .L139
 	add	r1, r1, r1, asl #3	@  num,  num
 	add	r3, r3, r1, asl #3
 	str	r0, [r3, #52]	@  god,  <variable>.god
 	mov	r0, #0
 	@ lr needed for prologue
 	bx	lr
-.L139:
+.L140:
 	.align	2
-.L138:
+.L139:
 	.word	mysprites
 	.size	godMode, .-godMode
 	.align	2
@@ -3584,16 +3588,16 @@ changeAI:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	@ link register save eliminated.
-	ldr	r3, .L141
+	ldr	r3, .L142
 	add	r1, r1, r1, asl #3	@  num,  num
 	add	r3, r3, r1, asl #3
 	str	r0, [r3, #64]	@  ai,  <variable>.AI
 	mov	r0, #0
 	@ lr needed for prologue
 	bx	lr
-.L142:
+.L143:
 	.align	2
-.L141:
+.L142:
 	.word	mysprites
 	.size	changeAI, .-changeAI
 	.align	2
@@ -3604,7 +3608,7 @@ moveSprite:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	@ link register save eliminated.
-	ldr	r3, .L144
+	ldr	r3, .L145
 	add	r2, r2, r2, asl #3	@  num,  num
 	add	r3, r3, r2, asl #3
 	str	r0, [r3, #24]	@  x,  <variable>.x
@@ -3612,9 +3616,9 @@ moveSprite:
 	@ lr needed for prologue
 	str	r1, [r3, #28]	@  y,  <variable>.y
 	bx	lr
-.L145:
+.L146:
 	.align	2
-.L144:
+.L145:
 	.word	mysprites
 	.size	moveSprite, .-moveSprite
 	.align	2
@@ -3625,10 +3629,10 @@ changeAnimation:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	str	lr, [sp, #-4]!
-	ldr	ip, .L147
+	ldr	ip, .L148
 	mov	lr, r1, asl #3	@  num
 	add	r1, lr, r1	@  num
-	ldr	r3, .L147+4
+	ldr	r3, .L148+4
 	add	ip, ip, r1, asl #3
 	mov	r2, r0, asl #4	@  animation
 	add	lr, lr, r3
@@ -3637,9 +3641,9 @@ changeAnimation:
 	strh	r2, [lr, #4]	@ movhi 	@  <variable>.attribute2
 	ldr	lr, [sp], #4
 	bx	lr
-.L148:
+.L149:
 	.align	2
-.L147:
+.L148:
 	.word	mysprites
 	.word	sprites
 	.size	changeAnimation, .-changeAnimation
@@ -3651,22 +3655,22 @@ flipSprite:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	@ link register save eliminated.
-	ldr	r3, .L158
+	ldr	r3, .L159
 	cmp	r0, #0	@  flip
 	add	r2, r3, r1, asl #3	@  num
 	ldreqh	r3, [r2, #2]	@  <variable>.attribute1
 	orreq	r3, r3, #4096
 	@ lr needed for prologue
 	streqh	r3, [r2, #2]	@ movhi 	@  <variable>.attribute1
-	beq	.L151
-	ldr	r3, .L158
+	beq	.L152
+	ldr	r3, .L159
 	cmp	r0, #1	@  flip
 	add	r1, r3, r1, asl #3	@  num
-	beq	.L157
-.L151:
+	beq	.L158
+.L152:
 	mov	r0, #0
 	bx	lr
-.L157:
+.L158:
 	ldrh	r3, [r1, #2]	@  <variable>.attribute1
 	bic	r3, r3, #4352
 	bic	r3, r3, #16
@@ -3678,12 +3682,69 @@ flipSprite:
 	bic	r3, r3, #4352
 	bic	r3, r3, #16
 	strh	r3, [r1, #2]	@ movhi 	@  <variable>.attribute1
-	b	.L151
-.L159:
+	b	.L152
+.L160:
 	.align	2
-.L158:
+.L159:
 	.word	sprites
 	.size	flipSprite, .-flipSprite
+	.align	2
+	.global	attack2
+	.type	attack2, %function
+attack2:
+	@ Function supports interworking.
+	@ args = 0, pretend = 0, frame = 0
+	@ frame_needed = 1, uses_anonymous_args = 0
+	mov	ip, sp
+	stmfd	sp!, {r4, fp, ip, lr, pc}
+	mov	r1, r0	@  num
+	ldr	r4, .L176
+	mov	r0, r0, asl #3	@  num
+	add	r3, r0, r1	@  num
+	add	r3, r4, r3, asl #3
+	ldr	r3, [r3, #68]	@  <variable>.animation
+	cmp	r3, #6
+	cmpne	r3, #3
+	sub	fp, ip, #4
+	beq	.L163
+	cmp	r3, #2
+	addle	r0, r0, #3	@  num
+	addgt	r0, r0, #6	@  num
+	bl	changeAnimation
+.L163:
+	ldr	ip, [r4, #24]	@  <variable>.x
+	add	r1, r4, #72
+	mvn	lr, #0
+	mov	r0, #126	@  attack2count
+.L172:
+	ldr	r3, [r1, #24]	@  <variable>.x
+	rsb	r3, ip, r3
+	add	r3, r3, #17
+	cmp	r3, #34
+	bhi	.L170
+	ldr	r3, [r1, #28]	@  <variable>.y
+	ldr	r2, [r4, #28]	@  <variable>.y
+	rsb	r3, r2, r3
+	add	r3, r3, #17
+	cmp	r3, #34
+	ldrls	r3, [r1, #4]	@  <variable>.health
+	subls	r3, r3, #1
+	strls	r3, [r1, #4]	@  <variable>.health
+.L170:
+	ldr	r3, [r1, #4]	@  <variable>.health
+	cmp	r3, #0
+	strlt	lr, [r1, #20]	@  <variable>.alive
+	subs	r0, r0, #1	@  attack2count,  attack2count
+	add	r1, r1, #72
+	bpl	.L172
+	mov	r0, #0
+	ldmea	fp, {r4, fp, sp, lr}
+	bx	lr
+.L177:
+	.align	2
+.L176:
+	.word	mysprites
+	.size	attack2, .-attack2
 	.align	2
 	.global	attack
 	.type	attack, %function
@@ -3692,31 +3753,44 @@ attack:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 1, uses_anonymous_args = 0
 	mov	ip, sp
-	stmfd	sp!, {fp, ip, lr, pc}
-	ldr	r3, .L166
+	stmfd	sp!, {r4, fp, ip, lr, pc}
+	ldr	r4, .L186
+	add	r3, r1, r1, asl #3	@  num,  num
+	add	r3, r4, r3, asl #3
+	ldr	r2, [r3, #68]	@  <variable>.animation
+	cmp	r2, #6
+	cmpne	r2, #3
 	sub	fp, ip, #4
-	mov	ip, r0, asl #3	@  num
-	add	r2, ip, r0	@  num
-	add	r3, r3, r2, asl #3
-	ldr	r3, [r3, #68]	@  <variable>.animation
-	cmp	r3, #6
-	cmpne	r3, #3
-	mov	lr, r0	@  num
-	beq	.L162
-	cmp	r3, #2
-	add	r2, ip, #6	@  num
-	add	r0, ip, #3	@  num
-	mov	r1, lr	@  num
-	movgt	r0, r2	@  num
-	movgt	r1, lr	@  num
+	mov	r3, r0	@  ani
+	beq	.L180
+	mov	r3, r3, asl #3	@  ani
+	mov	r0, r0, asl #3	@  ani
+	add	r3, r3, #6	@  ani
+	cmp	r2, #2
+	add	r0, r0, #3	@  ani
+	movgt	r0, r3	@  ani
 	bl	changeAnimation
-.L162:
+.L180:
+	ldr	r3, [r4, #4]	@  <variable>.health
+	mov	r2, #0
+	sub	r3, r3, #1
+	cmp	r3, r2
+	mov	r0, #240
+	mov	r1, #160
+	str	r3, [r4, #4]	@  <variable>.health
+	blt	.L185
+.L183:
 	mov	r0, #0
-	ldmea	fp, {fp, sp, lr}
+	ldmea	fp, {r4, fp, sp, lr}
 	bx	lr
-.L167:
+.L185:
+	bl	moveSprite
+	mvn	r3, #0
+	str	r3, [r4, #20]	@  <variable>.alive
+	b	.L183
+.L187:
 	.align	2
-.L166:
+.L186:
 	.word	mysprites
 	.size	attack, .-attack
 	.align	2
@@ -3727,70 +3801,106 @@ AI_Patrol:
 	@ args = 4, pretend = 0, frame = 0
 	@ frame_needed = 1, uses_anonymous_args = 0
 	mov	ip, sp
-	stmfd	sp!, {r4, r5, fp, ip, lr, pc}
-	cmp	r3, #0	@  y2
+	stmfd	sp!, {r4, r5, r6, fp, ip, lr, pc}
 	sub	fp, ip, #4
-	mov	lr, r1	@  y1
-	mov	ip, r3	@  y2
-	mov	r4, r2	@  x2
 	ldr	r5, [fp, #4]	@  num,  num
-	bne	.L169
-	ldr	r2, .L182
-	add	r3, r5, r5, asl #3	@  num,  num
-	add	r2, r2, r3, asl #3
-	ldr	r1, [r2, #40]	@  <variable>.flip
-	cmp	r1, #0
-	bne	.L170
-	ldr	r3, [r2, #24]	@  <variable>.x
+	ldr	r6, .L207
+	mov	r4, r5, asl #3	@  num
+	add	ip, r4, r5	@  num
+	add	ip, r6, ip, asl #3
+	ldr	lr, [ip, #20]	@  <variable>.alive
+	cmp	lr, #0
+	mov	lr, r3	@  y2
+	ble	.L189
+	cmp	r3, #0	@  y2
+	bne	.L190
+	ldr	r3, [ip, #40]	@  <variable>.flip
+	cmp	r3, #0
+	bne	.L191
+	ldr	r3, [ip, #24]	@  <variable>.x
 	add	r3, r3, #1
-	cmp	r3, r4	@  x2
-	str	lr, [r2, #28]	@  y1,  <variable>.y
-	str	r3, [r2, #24]	@  <variable>.x
-.L181:
+	cmp	r3, r2	@  x2
+	str	r1, [ip, #28]	@  y1,  <variable>.y
+	str	r3, [ip, #24]	@  <variable>.x
+.L206:
 	movge	r3, #1
-	bge	.L179
-.L174:
+	bge	.L203
+.L195:
+	add	r3, r4, r5	@  num
+	add	r4, r6, r3, asl #3
+	ldr	r2, [r4, #24]	@  <variable>.x
+	ldr	r3, [r6, #24]	@  <variable>.x
+	rsb	r2, r3, r2
+	add	r2, r2, #9
+	cmp	r2, #18
+	bhi	.L200
+	ldr	r2, [r6, #28]	@  <variable>.y
+	ldr	r3, [r4, #28]	@  <variable>.y
+	rsb	r3, r2, r3
+	add	r3, r3, #9
+	cmp	r3, #18
+	bhi	.L200
+	ldr	r3, [r4, #68]	@  <variable>.animation
+	cmp	r3, #3
+	beq	.L200
+	cmp	r3, #6
+	beq	.L200
+	mov	r1, r5	@  num
+	mov	r0, #0
+	bl	attack
+	add	r0, r4, #24
+	ldmia	r0, {r0, r1}	@ phole ldm
+.L204:
+	mov	r2, r5	@  num
+	bl	moveSprite
+.L202:
 	mov	r0, r5	@  num
 	bl	MoveSprite
 	mov	r0, #0
-	ldmea	fp, {r4, r5, fp, sp, lr}
+	ldmea	fp, {r4, r5, r6, fp, sp, lr}
 	bx	lr
-.L179:
-	str	r3, [r2, #40]	@  <variable>.flip
-	b	.L174
-.L170:
-	ldr	r3, [r2, #24]	@  <variable>.x
+.L200:
+	mov	r1, r5	@  num
+	mov	r0, #0
+	bl	changeAnimation
+	b	.L202
+.L203:
+	str	r3, [ip, #40]	@  <variable>.flip
+	b	.L195
+.L191:
+	ldr	r3, [ip, #24]	@  <variable>.x
 	sub	r3, r3, #1
 	cmp	r3, r0	@  x1
-	str	lr, [r2, #28]	@  y1,  <variable>.y
-	str	r3, [r2, #24]	@  <variable>.x
-	strle	ip, [r2, #40]	@  y2,  <variable>.flip
-	b	.L174
-.L169:
-	ldr	r2, .L182
-	add	r3, r5, r5, asl #3	@  num,  num
-	add	r2, r2, r3, asl #3
-	ldr	r1, [r2, #40]	@  <variable>.flip
-	cmp	r1, #0
-	bne	.L175
-	ldr	r3, [r2, #28]	@  <variable>.y
+	str	r1, [ip, #28]	@  y1,  <variable>.y
+	str	r3, [ip, #24]	@  <variable>.x
+	strle	lr, [ip, #40]	@  y2,  <variable>.flip
+	b	.L195
+.L190:
+	ldr	r3, [ip, #40]	@  <variable>.flip
+	cmp	r3, #0
+	bne	.L196
+	ldr	r3, [ip, #28]	@  <variable>.y
 	add	r3, r3, #1
-	str	r0, [r2, #24]	@  x1,  <variable>.x
-	str	r3, [r2, #28]	@  <variable>.y
-	cmp	r3, ip	@  y2
-	b	.L181
-.L175:
-	ldr	r3, [r2, #28]	@  <variable>.y
+	str	r0, [ip, #24]	@  x1,  <variable>.x
+	str	r3, [ip, #28]	@  <variable>.y
+	cmp	r3, lr	@  y2
+	b	.L206
+.L196:
+	ldr	r3, [ip, #28]	@  <variable>.y
 	sub	r3, r3, #1
-	cmp	r3, lr	@  y1
-	str	r0, [r2, #24]	@  x1,  <variable>.x
-	str	r3, [r2, #28]	@  <variable>.y
-	bgt	.L174
+	cmp	r3, r1	@  y1
+	str	r0, [ip, #24]	@  x1,  <variable>.x
+	str	r3, [ip, #28]	@  <variable>.y
+	bgt	.L195
 	mov	r3, #0
-	b	.L179
-.L183:
+	b	.L203
+.L189:
+	mov	r0, #240
+	mov	r1, #160
+	b	.L204
+.L208:
 	.align	2
-.L182:
+.L207:
 	.word	mysprites
 	.size	AI_Patrol, .-AI_Patrol
 	.align	2
@@ -3801,13 +3911,19 @@ AI_follow:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 1, uses_anonymous_args = 0
 	mov	ip, sp
-	stmfd	sp!, {r4, fp, ip, lr, pc}
+	stmfd	sp!, {r4, r5, fp, ip, lr, pc}
 	mov	r4, r0	@  num
 	sub	fp, ip, #4
-	ldr	r0, .L196
+	ldr	r0, .L222
 	mov	ip, r4, asl #3	@  num
 	add	r3, ip, r4	@  num
 	add	r1, r0, r3, asl #3
+	ldr	r2, [r1, #20]	@  <variable>.alive
+	cmp	r2, #0
+	ble	.L210
+	ldr	r3, [r0, #20]	@  <variable>.alive
+	cmp	r3, #0
+	ble	.L218
 	ldr	r2, [r1, #24]	@  <variable>.x
 	ldr	r3, [r0, #24]	@  <variable>.x
 	rsb	r3, r3, r2
@@ -3825,39 +3941,50 @@ AI_follow:
 	addle	r3, r2, #1
 	str	r3, [r1, #28]	@  <variable>.y
 	add	r3, ip, r4	@  num
-	add	r1, r0, r3, asl #3
-	ldr	r2, [r1, #24]	@  <variable>.x
+	add	r5, r0, r3, asl #3
+	ldr	r2, [r5, #24]	@  <variable>.x
 	ldr	r3, [r0, #24]	@  <variable>.x
 	rsb	r2, r3, r2
 	add	r2, r2, #9
 	cmp	r2, #18
-	bhi	.L189
+	bhi	.L216
 	ldr	r2, [r0, #28]	@  <variable>.y
-	ldr	r3, [r1, #28]	@  <variable>.y
+	ldr	r3, [r5, #28]	@  <variable>.y
 	rsb	r3, r2, r3
 	add	r3, r3, #9
 	cmp	r3, #18
-	bhi	.L189
-	ldr	r3, [r1, #68]	@  <variable>.animation
+	bhi	.L216
+	ldr	r3, [r5, #68]	@  <variable>.animation
 	cmp	r3, #3
-	moveq	r1, #2
-	moveq	r0, #0
-	movne	r1, #2
-	movne	r0, #3
-.L195:
-	bl	changeAnimation
+	beq	.L216
+	cmp	r3, #6
+	beq	.L216
+	mov	r1, r4	@  num
+	mov	r0, #0
+	bl	attack
+	add	r0, r5, #24
+	ldmia	r0, {r0, r1}	@ phole ldm
+.L221:
+	mov	r2, r4	@  num
+	bl	moveSprite
+.L218:
 	mov	r0, r4	@  num
 	bl	MoveSprite
 	mov	r0, #0
-	ldmea	fp, {r4, fp, sp, lr}
+	ldmea	fp, {r4, r5, fp, sp, lr}
 	bx	lr
-.L189:
+.L216:
+	mov	r1, r4	@  num
 	mov	r0, #0
-	mov	r1, #2
-	b	.L195
-.L197:
+	bl	changeAnimation
+	b	.L218
+.L210:
+	mov	r0, #240
+	mov	r1, #160
+	b	.L221
+.L223:
 	.align	2
-.L196:
+.L222:
 	.word	mysprites
 	.size	AI_follow, .-AI_follow
 	.align	2
@@ -3910,24 +4037,24 @@ main:
 	@ frame_needed = 1, uses_anonymous_args = 0
 	mov	ip, sp
 	stmfd	sp!, {r4, r5, fp, ip, lr, pc}
-	ldr	r3, .L206
+	ldr	r3, .L232
 	sub	fp, ip, #4
 	mov	lr, pc
 	bx	r3
-	ldr	r2, .L206+4
+	ldr	r2, .L232+4
 	mov	lr, pc
 	bx	r2
-	ldr	r5, .L206+8
-	ldr	r4, .L206+12
-.L205:
+	ldr	r5, .L232+8
+	ldr	r4, .L232+12
+.L231:
 	mov	lr, pc
 	bx	r5
 	mov	lr, pc
 	bx	r4
-	b	.L205
-.L207:
+	b	.L231
+.L233:
 	.align	2
-.L206:
+.L232:
 	.word	Initialize
 	.word	LoadContent
 	.word	Update
@@ -3941,14 +4068,14 @@ Initialize:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	@ link register save eliminated.
-	ldr	r3, .L209
+	ldr	r3, .L235
 	mov	r2, #1
 	@ lr needed for prologue
 	str	r2, [r3, #0]	@  gameState
 	b	easy
-.L210:
+.L236:
 	.align	2
-.L209:
+.L235:
 	.word	gameState
 	.size	Initialize, .-Initialize
 	.align	2
@@ -3959,15 +4086,15 @@ LoadContent:
 	@ args = 0, pretend = 0, frame = 0
 	@ frame_needed = 0, uses_anonymous_args = 0
 	@ link register save eliminated.
-	ldr	r3, .L213
+	ldr	r3, .L239
 	ldr	r2, [r3, #0]	@  gameState
 	cmp	r2, #0
 	@ lr needed for prologue
 	bxne	lr
 	b	LoadInitialTitleScreen
-.L214:
+.L240:
 	.align	2
-.L213:
+.L239:
 	.word	gameState
 	.size	LoadContent, .-LoadContent
 	.align	2
@@ -3979,22 +4106,22 @@ Update:
 	@ frame_needed = 1, uses_anonymous_args = 0
 	mov	ip, sp
 	stmfd	sp!, {r4, r5, fp, ip, lr, pc}
-	ldr	r3, .L221
+	ldr	r3, .L247
 	sub	fp, ip, #4
 	sub	sp, sp, #4
 	ldr	r4, [r3, #0]	@  gameState
 	cmp	r4, #0
-	bne	.L216
+	bne	.L242
 	ldmea	fp, {r4, r5, fp, sp, lr}
 	b	UpdateTitleScreen
-.L216:
+.L242:
 	cmp	r4, #1
-	ldr	r5, .L221+4
-	beq	.L220
-.L215:
+	ldr	r5, .L247+4
+	beq	.L246
+.L241:
 	ldmea	fp, {r4, r5, fp, sp, lr}
 	bx	lr
-.L220:
+.L246:
 	bl	runSprite
 	mov	r0, #0
 	mov	r3, r0
@@ -4007,14 +4134,14 @@ Update:
 	cmp	r3, #5
 	mov	r0, #2
 	str	r3, [r5, #0]	@  aicount
-	ble	.L215
+	ble	.L241
 	bl	AI_follow
 	mov	r3, #0
 	str	r3, [r5, #0]	@  aicount
-	b	.L215
-.L222:
+	b	.L241
+.L248:
 	.align	2
-.L221:
+.L247:
 	.word	gameState
 	.word	aicount
 	.size	Update, .-Update
@@ -4029,23 +4156,23 @@ Draw:
 	stmfd	sp!, {fp, ip, lr, pc}
 	sub	fp, ip, #4
 	bl	WaitVBlank
-	ldr	r3, .L228
+	ldr	r3, .L254
 	ldr	r3, [r3, #0]	@  gameState
 	cmp	r3, #0
-	bne	.L224
+	bne	.L250
 	ldmea	fp, {fp, sp, lr}
 	b	DrawTitleScreen
-.L224:
+.L250:
 	cmp	r3, #1
-	beq	.L227
+	beq	.L253
 	ldmea	fp, {fp, sp, lr}
 	bx	lr
-.L227:
+.L253:
 	ldmea	fp, {fp, sp, lr}
 	b	UpdateSpriteMemory
-.L229:
+.L255:
 	.align	2
-.L228:
+.L254:
 	.word	gameState
 	.size	Draw, .-Draw
 	.comm	gameState, 4, 32

@@ -24,7 +24,8 @@ int changeAI(int ai, int num);
 int moveSprite(int x, int y, int num);
 int changeAnimation(int animation, int num);
 int flipSprite(int flip, int num);
-int attack(int num);
+int attack(int ani, int num);
+int attack2(int num);
 
 int AI_Patrol(int x1, int y1, int x2, int y2, int num);
 int AI_follow(int num);
@@ -92,10 +93,12 @@ void easySprites()
 	}
 	mysprites[0].x = 40;
 	mysprites[0].y = 40;
+	mysprites[0].health = 10;
 	mysprites[1].x = 0;
 	mysprites[1].y = 20;
 	mysprites[2].x = 150;
 	mysprites[2].y = 0;
+	mysprites[2].health = 1;
 	UpdateSpriteMemory();
 }
 
@@ -156,58 +159,61 @@ void UpdateSpriteMemory()
 void runSprite()
 {
     CheckButtons();
-    if(Pressed(BUTTON_A))
-    {
-        checka = 1;
-        attack(0);
-    }
-    else if( checka > 0)
-    {
-        checka = 0;
-        changeAnimation(0,0);
-    }
+	if(mysprites[0].alive > 0)
+	{
+		if(Pressed(BUTTON_A))
+		{
+			checka = 1;
+			attack2(0);
+		}
+		else if( checka > 0)
+		{
+			checka = 0;
+			changeAnimation(0,0);
+		}
     
-    if(Pressed(BUTTON_LEFT))
-    {
-        flipSprite(0,0);
-		if (mysprites[0].animation == 4)
-            changeAnimation(5,0);
-        else
-            changeAnimation(4,0);
-		if(mysprites[0].x > 0)
-			moveSprite(mysprites[0].x - 1, mysprites[0].y, 0);
-		
-    }
-    if(Pressed(BUTTON_RIGHT))
-    {
-        flipSprite(1,0);
-        if (mysprites[0].animation == 4)
-            changeAnimation(5,0);
-        else
-		  changeAnimation(4,0);
-		if(mysprites[0].x + 16 < 240)
-			moveSprite(mysprites[0].x + 1, mysprites[0].y, 0);
-    }
-    if(Pressed(BUTTON_UP))
-    {
-        flipSprite(1,0);
-		if (mysprites[0].animation == 1)
-            changeAnimation(2,0);
-        else
-		  changeAnimation(1,0);
-		if(mysprites[0].y > 0)
-			moveSprite(mysprites[0].x, mysprites[0].y - 1, 0);
-    }
-    if(Pressed(BUTTON_DOWN))
-    {
-        flipSprite(0,0);
-		if (mysprites[0].animation == 1)
-            changeAnimation(2,0);
-        else
-		  changeAnimation(1,0);
-		if(mysprites[0].y + 16 < 160)
-			moveSprite(mysprites[0].x, mysprites[0].y + 1, 0);
-    }
+		if(Pressed(BUTTON_LEFT))
+		{
+			flipSprite(0,0);
+			if (mysprites[0].animation == 4)
+				changeAnimation(5,0);
+			else
+				changeAnimation(4,0);
+			if(mysprites[0].x > 0)
+				moveSprite(mysprites[0].x - 1, mysprites[0].y, 0);
+			
+		}
+		if(Pressed(BUTTON_RIGHT))
+		{
+			flipSprite(1,0);
+			if (mysprites[0].animation == 4)
+				changeAnimation(5,0);
+			else
+			changeAnimation(4,0);
+			if(mysprites[0].x + 16 < 240)
+				moveSprite(mysprites[0].x + 1, mysprites[0].y, 0);
+		}
+		if(Pressed(BUTTON_UP))
+		{
+			flipSprite(1,0);
+			if (mysprites[0].animation == 1)
+				changeAnimation(2,0);
+			else
+			changeAnimation(1,0);
+			if(mysprites[0].y > 0)
+				moveSprite(mysprites[0].x, mysprites[0].y - 1, 0);
+		}
+		if(Pressed(BUTTON_DOWN))
+		{
+			flipSprite(0,0);
+			if (mysprites[0].animation == 1)
+				changeAnimation(2,0);
+			else
+			changeAnimation(1,0);
+			if(mysprites[0].y + 16 < 160)
+				moveSprite(mysprites[0].x, mysprites[0].y + 1, 0);
+		}
+	}
 	MoveSprite(0);
 }
 
@@ -280,8 +286,9 @@ int flipSprite(int flip, int num)
     return 0;
 }
 
-int attack(int num)
+int attack2(int num)
 {
+    int attack2count = 1;
     if(mysprites[num].animation == 3 || mysprites[num].animation == 6);
     else
     {
@@ -289,6 +296,31 @@ int attack(int num)
             changeAnimation(num*8 + 3,num);
         else
             changeAnimation(num*8 + 6,num);
+    }
+    for (attack2count = 1; attack2count < 128; attack2count++)
+    {
+        if(abs(mysprites[attack2count].x - mysprites[0].x) < 18 && abs(mysprites[attack2count].y - mysprites[0].y) < 18)
+            mysprites[attack2count].health--;
+        if(mysprites[attack2count].health < 0)
+            mysprites[attack2count].alive = -1;
+    }
+    return 0;
+}
+int attack(int ani,int num)
+{
+    if(mysprites[num].animation == 3 || mysprites[num].animation == 6);
+    else
+    {
+        if(mysprites[num].animation < 3)
+            changeAnimation(ani*8 + 3,num);
+        else
+            changeAnimation(ani*8 + 6,num);
+    }
+    mysprites[0].health--;
+    if (mysprites[0].health < 0)
+    {
+        moveSprite(240, 160, 0);
+        mysprites[0].alive = -1;
     }
     return 0;
 }
@@ -325,75 +357,123 @@ int isWall(int test)
 
 int AI_Patrol(int x1, int y1, int x2, int y2, int num)
 {
-	if (y2 == 0)
-	{
-		if (mysprites[num].flip == 0)
-		{
-			mysprites[num].x++;
-			mysprites[num].y = y1;
-			if (mysprites[num].x >= x2)
-				mysprites[num].flip = 1;
-		}
-		else
-		{
-			mysprites[num].x--;
-			mysprites[num].y = y1;
-			if (mysprites[num].x <= x1)
-				mysprites[num].flip = 0;
-		}
-	}
-	else
-	{
-		if (mysprites[num].flip == 0)
-		{
-			mysprites[num].y++;
-			mysprites[num].x = x1;
-			if (mysprites[num].y >= y2)
-				mysprites[num].flip = 1;
-		}
-		else
-		{
-			mysprites[num].y--;
-			mysprites[num].x = x1;
-			if (mysprites[num].y <= y1)
-				mysprites[num].flip = 0;
-		}
-	}
-	MoveSprite(num);
-		
-	return 0;
+    if(mysprites[num].alive > 0)
+    {
+	   if (y2 == 0)
+	   {
+    		if (mysprites[num].flip == 0)
+    		{
+    			mysprites[num].x++;
+    			mysprites[num].y = y1;
+    			if (mysprites[num].x >= x2)
+    				mysprites[num].flip = 1;
+    		}
+    		else
+    		{
+    			mysprites[num].x--;
+    			mysprites[num].y = y1;
+    			if (mysprites[num].x <= x1)
+    				mysprites[num].flip = 0;
+    		}
+    	}
+    	else
+    	{
+    		if (mysprites[num].flip == 0)
+    		{
+    			mysprites[num].y++;
+    			mysprites[num].x = x1;
+    			if (mysprites[num].y >= y2)
+    				mysprites[num].flip = 1;
+    		}
+    		else
+    		{
+    			mysprites[num].y--;
+    			mysprites[num].x = x1;
+    			if (mysprites[num].y <= y1)
+    				mysprites[num].flip = 0;
+    		}
+    	}
+
+        if(abs(mysprites[num].x - mysprites[0].x) < 10 && abs(mysprites[num].y - mysprites[0].y) < 10 && mysprites[num].animation != 3 && mysprites[num].animation != 6)
+        {
+            attack(0,num);
+      		moveSprite(mysprites[num].x, mysprites[num].y, num);
+        }
+        else
+            changeAnimation(0,num);
+    }
+    else
+        moveSprite(240,160,num);
+    MoveSprite(num);
+   	return 0;
+    
 }
 
 int AI_follow(int num)
 {
-    if (mysprites[num].x - mysprites[0].x > 0)
-        mysprites[num].x--;
-    else
-        mysprites[num].x++;
-        
-    if (mysprites[num].y - mysprites[0].y > 0)
-        mysprites[num].y--;
-    else
-        mysprites[num].y++;
-        
-    if(abs(mysprites[num].x - mysprites[0].x) < 10 && abs(mysprites[num].y - mysprites[0].y) < 10)
+    if(mysprites[num].alive > 0)
     {
-        if(mysprites[num].animation == 3)
-            changeAnimation(0,2);
-        else
-            changeAnimation(3,2);
-		
-        //attack(2);
+        if(mysprites[0].alive > 0)
+        {
+            if (mysprites[num].x - mysprites[0].x > 0)
+                mysprites[num].x--;
+            else
+                mysprites[num].x++;
+
+            if (mysprites[num].y - mysprites[0].y > 0)
+                mysprites[num].y--;
+            else
+                mysprites[num].y++;
+
+            if(abs(mysprites[num].x - mysprites[0].x) < 10 && abs(mysprites[num].y - mysprites[0].y) < 10 && mysprites[num].animation != 3 && mysprites[num].animation != 6)
+            {
+                attack(0,num);
+        		moveSprite(mysprites[num].x, mysprites[num].y, num);
+            }
+            else
+                changeAnimation(0,num);
+        }
     }
     else
-        changeAnimation(0,2);
+    {
+        moveSprite(240,160,num);
+    }
     MoveSprite(num);
-    
     return 0;
 }
 
+/*
+int AI_followWall(int num)
+{
+    if(mysprites[0].alive > 0)
+    {
+        if (mysprites[num].x - mysprites[0].x > 0)
+            if(isWall(mysprites[num].x - 1,mysprites[num].y))
+                mysprites[num].x--;
+        else
+            if(isWall(mysprites[num].x + 1,mysprites[num].y))
+                mysprites[num].x++;
 
+        if (mysprites[num].y - mysprites[0].y > 0)
+            if(isWall(mysprites[num].x,mysprites[num].y - 1))
+                mysprites[num].y--;
+        else
+            if(isWall(mysprites[num].x,mysprites[num].y + 1))
+                mysprites[num].y++;
 
+        if(abs(mysprites[num].x - mysprites[0].x) < 10 && abs(mysprites[num].y - mysprites[0].y) < 10 && mysprites[num].animation != 3 && mysprites[num].animation != 6)
+        {
+            attack(0,2);
+    		moveSprite(mysprites[num].x, mysprites[num].y, num);
+        }
+        else
+            changeAnimation(0,2);
+        MoveSprite(num);
+    }
+
+    return 0;
+}
+*/
 
 
 
