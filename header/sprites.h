@@ -304,6 +304,7 @@ int attack2(int num)
         if(mysprites[attack2count].health < 0)
             mysprites[attack2count].alive = -1;
     }
+    wack();
     return 0;
 }
 int attack(int ani,int num)

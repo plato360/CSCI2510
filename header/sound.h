@@ -35,6 +35,9 @@ typedef unsigned long u32;
 
 
 #include "maintheme.h"
+#include "attack.h"
+
+
 
 //global variables
 u16 len = 0;
@@ -108,3 +111,44 @@ void sound()
 
 }
 
+void wack()
+{
+	u16 samplerate = 704500;
+    u16 samplelen = 341;
+    u16 samples;
+
+	
+    //create custom interrupt handler for vblank (chapter 8)
+	REG_IME = 0x00;
+	REG_INTERRUPT = (u32)MyHandler;
+    REG_IE |= INT_VBLANK;
+	REG_DISPSTAT |= 0x08;
+	REG_IME = 0x01;
+	
+	//output to both channels and reset the FIFO
+	REG_SGCNT0_H = DSOUND_A_RIGHT_CHANNEL |
+        DSOUND_A_LEFT_CHANNEL | DSOUND_A_FIFO_RESET;
+
+	//enable all sound
+	REG_SGCNT1 = SOUND_MASTER_ENABLE;
+
+	//DMA1 source addresss
+	REG_DMA1SAD = (u32)swordattack;
+
+	//DMA1 destination address
+	REG_DMA1DAD = 0x40000A0;
+
+	//write 32 bits into destination every vblank
+	REG_DMA1CNT_H =  DMA_DEST_FIXED | DMA_REPEAT | 1024 |
+        DMA_TIMING_SYNC_TO_DISPLAY | 32768;
+
+	//set the sample rate
+	samples = 16777216 / samplerate;
+	REG_TM0D = 65536 - samples;
+
+    //determine length of playback in vblanks
+    len = samplelen / samples * 15.57;
+
+	//enable the timer
+	REG_TM0CNT = TIMER_ENABLE;
+}
