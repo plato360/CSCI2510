@@ -23,11 +23,11 @@ void Initialize() //Initializes variables
 {
     gameState = STATE_INGAME;
    	easy();            //located in main.h
-   	sound();
 }
 
 void LoadContent() //Loads the initial content
 {
+	sound();
     if (gameState == STATE_TITLE)
         LoadInitialTitleScreen();
     

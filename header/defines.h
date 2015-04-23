@@ -175,3 +175,57 @@ void WaitVBlank(void)
 	while(REG_VCOUNT < 160);
 }
 
+
+
+
+/////////////////////////////////////////////////////////////////
+#define REG_DMA3SAD *(volatile unsigned int*)0x40000D4
+#define REG_DMA3DAD *(volatile unsigned int*)0x40000D8
+#define REG_DMA3CNT *(volatile unsigned int*)0x40000DC
+#define DMA_ENABLE 0x80000000
+#define DMA_TIMING_IMMEDIATE 0x00000000
+#define DMA_16 0x00000000
+#define DMA_32 0x04000000
+#define DMA_32NOW (DMA_ENABLE | DMA_TIMING_IMMEDIATE | DMA_32)
+#define DMA_16NOW (DMA_ENABLE | DMA_TIMING_IMMEDIATE | DMA_16)
+
+//scrolling registers for backgrounds
+#define REG_BG0HOFS *(volatile unsigned short*)0x4000010
+#define REG_BG0VOFS *(volatile unsigned short*)0x4000012
+#define REG_BG1HOFS *(volatile unsigned short*)0x4000014
+#define REG_BG1VOFS *(volatile unsigned short*)0x4000016
+#define REG_BG2HOFS *(volatile unsigned short*)0x4000018
+#define REG_BG2VOFS *(volatile unsigned short*)0x400001A
+#define REG_BG3HOFS *(volatile unsigned short*)0x400001C
+#define REG_BG3VOFS *(volatile unsigned short*)0x400001E
+
+
+//background setup registers and data
+#define REG_BG0CNT *(volatile unsigned short*)0x4000008
+#define REG_BG1CNT *(volatile unsigned short*)0x400000A
+#define REG_BG2CNT *(volatile unsigned short*)0x400000C
+#define REG_BG3CNT *(volatile unsigned short*)0x400000E
+#define BG_COLOR256 0x80
+#define CHAR_SHIFT 2
+#define SCREEN_SHIFT 8
+#define WRAPAROUND 0x1
+
+//Palette for Backgrounds
+#define BGPaletteMem ((unsigned short*)0x5000000)
+
+//background tile bitmap sizes
+#define TEXTBG_SIZE_256x256 0x0
+#define TEXTBG_SIZE_256x512	0x8000
+#define TEXTBG_SIZE_512x256	0x4000
+#define TEXTBG_SIZE_512x512	0xC000
+
+//background memory offset macros
+#define CharBaseBlock(n) (((n)*0x4000)+0x6000000)
+#define ScreenBaseBlock(n) (((n)*0x800)+0x6000000)
+
+unsigned short MapData1[1024];
+//create a pointer to background 0 tilemap buffer
+ unsigned short* bg01map =(unsigned short*)ScreenBaseBlock(3);
+ void DMAFastCopy(void* source, void* dest, unsigned int count, unsigned int mode);
+
+ ////////////////////////////////////////////////////////////////////////

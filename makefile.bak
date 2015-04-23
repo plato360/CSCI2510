@@ -62,7 +62,7 @@ KRAWALL_FILES=
 #
 # Set a list of files you want to compile
 #
-OFILES += main.o header/AILogic.o header/sound.o header/maintheme.o header/splash.o 
+OFILES += main.o header/AILogic.o header/sound.o header/maintheme.o header/splash.o header/Backgrounds/HUD.map.o header/Backgrounds/HUD.raw.o header/Backgrounds/master.pal.o 
 
 ##########################################################################################
 # Standard Makefile targets start here
