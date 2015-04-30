@@ -90,7 +90,7 @@ void easySprites()
 		defaultSprite(count);
 		sprites[count].attribute0 = COLOR_256 | 240;
 		sprites[count].attribute1 = SIZE_16 | 160;
-		sprites[count].attribute2 = 0 | 0xC00;
+		sprites[count].attribute2 = 0xC00;
 		
 	}
 	mysprites[0].x = 40;

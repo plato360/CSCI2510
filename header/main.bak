@@ -42,10 +42,8 @@ void loadHud()
 {
 	int countx = 0;
 	int county = 0;
-	unsigned short MapData1[1024];
-	//create a pointer to background 0 tilemap buffer
-    unsigned short* bg01map =(unsigned short*)ScreenBaseBlock(3);
-	REG_BG0CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(3 << SCREEN_SHIFT) | 0x0;
+	
+	REG_BG0CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(3 << SCREEN_SHIFT) | 0x1;
 	DMAFastCopy((void*)master_Palette, (void*)BGPaletteMem,256, DMA_16NOW);
 	for(county = 0; county <32; county++)
 	{
