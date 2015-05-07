@@ -229,5 +229,7 @@ unsigned short MapData2[1024];
  unsigned short* bg01map =(unsigned short*)ScreenBaseBlock(3);
  unsigned short* bg02map =(unsigned short*)ScreenBaseBlock(10);
  void DMAFastCopy(void* source, void* dest, unsigned int count, unsigned int mode);
+ 
+ int immune = 0;
 
  ////////////////////////////////////////////////////////////////////////

@@ -164,6 +164,14 @@ void runSprite()
     CheckButtons();
 	if(mysprites[0].alive > 0)
 	{
+	    if (immune > 0) {
+	        immune--;
+	        if (immune % 2 == 0)
+	           moveSprite(mysprites[0].x - 1, mysprites[0].y + 1, 0);
+            else
+               moveSprite(mysprites[0].x + 1, mysprites[0].y - 1, 0);
+        }
+	
 		if(Pressed(BUTTON_A))
 		{
 			if (checka < 1)
@@ -314,6 +322,9 @@ int attack2(int num)
 }
 int attack(int ani,int num)
 {
+    if (immune > 0)
+        return;
+    immune = 60;
     if(mysprites[num].animation == 3 || mysprites[num].animation == 6);
     else
     {
