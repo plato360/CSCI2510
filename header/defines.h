@@ -225,9 +225,12 @@ void WaitVBlank(void)
 
 unsigned short MapData1[1024];
 unsigned short MapData2[1024];
+unsigned short MapData4[1024];
+
 //create a pointer to background 0 tilemap buffer
  unsigned short* bg01map =(unsigned short*)ScreenBaseBlock(3);
  unsigned short* bg02map =(unsigned short*)ScreenBaseBlock(10);
+  unsigned short* bg04map =(unsigned short*)ScreenBaseBlock(26);
  void DMAFastCopy(void* source, void* dest, unsigned int count, unsigned int mode);
  
  int immune = 0;

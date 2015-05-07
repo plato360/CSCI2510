@@ -9,3 +9,5 @@ header\Backgrounds\HUD.raw.c
 header\Backgrounds\master.pal.c
 header\Backgrounds\Room1.map.c
 header\Backgrounds\Room1.raw.c
+header\Backgrounds\Room1hitmap.map.c
+header\Backgrounds\Room1hitmap.raw.c

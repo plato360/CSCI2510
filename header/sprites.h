@@ -274,6 +274,11 @@ int changeAI(int ai, int num)
 
 int moveSprite(int x, int y, int num)
 {
+    int xtile = x / 8;
+    int ytile = y / 8;
+    if (x < 240 && (bg04map[ytile*32+xtile] < 9 || bg04map[(ytile+2)*32+xtile] < 9 || y % 8 == 0 && bg04map[(ytile+3)*32+xtile] < 9 || bg04map[ytile*32+(xtile+1)] < 9 || bg04map[ytile*32+(xtile+2)] < 9))
+        return 0;
+    
 	mysprites[num].x = x;
 	mysprites[num].y = y;
 	return 0;
