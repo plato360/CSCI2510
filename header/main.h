@@ -66,6 +66,8 @@ void loadHud()
 	
 	DMAFastCopy((void*)HUD_Tiles, (void*)CharBaseBlock(0),2496/4, DMA_32NOW);
     DMAFastCopy((void*)MapData1, (void*)bg01map, 512, DMA_32NOW);
+    
+    addHeart(10);
 }
 
 void loadRoom1()

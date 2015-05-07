@@ -334,9 +334,9 @@ int attack(int ani,int num)
             changeAnimation(ani*8 + 6,num);
     }
     
-    addHeart(mysprites[0].health--);
+    addHeart(--mysprites[0].health);
 
-    if (mysprites[0].health < 0)
+    if (mysprites[0].health <= 0)
     {
         moveSprite(240, 160, 0);
         mysprites[0].alive = -1;
@@ -351,41 +351,37 @@ int addHeart(int num)
     int cah = 0;
     for(cah = 0;cah < 10; cah++)
     {
-        if(cah < 5)
-        {
+        
             if(cah < num)
             {
-                MapData1[countaddheart + cah * 2] = 0x0001;
-                MapData1[countaddheart + (cah * 2 + 1)] = 0x0002;
-                MapData1[countaddheart + cah * 2 + 33] = 0x0004;
-                MapData1[countaddheart + (cah * 2 + 1) + 33] = 0x0003;
+                if (cah % 2 == 0) {
+                    MapData1[countaddheart + cah] = 0x0001;
+                    MapData1[countaddheart + cah + 32] = 0x0003;
+                }
+                else {
+                    MapData1[countaddheart + (cah)] = 0x0002;
+                    MapData1[countaddheart + (cah) + 32] = 0x0004;
+                }
             }
             else
             {
-                MapData1[countaddheart + cah * 2] = 0x0000;
-                MapData1[countaddheart + (cah * 2 + 1)] = 0x0000;
-                MapData1[countaddheart + cah * 2 + 32] = 0x00000;
-                MapData1[countaddheart + (cah * 2 + 1) + 32] = 0x0000;
+                if (cah % 2 == 0) {
+                    MapData1[countaddheart + cah] = 0x0000;
+                    MapData1[countaddheart + cah + 32] = 0x00000;
+                }
+                else {
+                    MapData1[countaddheart + (cah)] = 0x0000;
+                    MapData1[countaddheart + (cah) + 32] = 0x0000;
+                }
             }
-        }
-        else
-        {
-            if(cah < num)
-            {
-                MapData1[countaddheart2 + cah * 2 + y*2] = 0x0001;
-                MapData1[countaddheart2 + (cah * 2 + 1 + y*2)] = 0x0002;
-                MapData1[countaddheart2 + cah * 2 + y*3 + 1 ] = 0x00004;
-                MapData1[countaddheart2 + (cah * 2 + 1) + y*3 + 1] = 0x0003;
-            }
-            else
-            {
-                MapData1[countaddheart2 + cah * 2 + y*2] = 0x0000;
-                MapData1[countaddheart2 + (cah * 2 + 1) + y*2] = 0x0000;
-                MapData1[countaddheart2 + cah * 2 + y*3] = 0x00000;
-                MapData1[countaddheart2 + (cah * 2 + 1) + y*3] = 0x0000;
-            }
+
+                MapData1[countaddheart + cah + y*2] = 0x0000;
+                MapData1[countaddheart + (cah + 1) + y*2] = 0x0000;
+                MapData1[countaddheart + cah + y*3] = 0x00000;
+                MapData1[countaddheart + (cah + 1) + y*3] = 0x0000;
+
             
-        }
+
     }
     DMAFastCopy((void*)MapData1, (void*)bg01map, 512, DMA_32NOW);
     return 0;
