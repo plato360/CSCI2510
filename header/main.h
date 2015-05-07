@@ -10,6 +10,8 @@
 #include "sound.h"
 #include "Backgrounds/HUD.map.c"
 #include "Backgrounds/HUD.raw.c"
+#include "Backgrounds/Room1.map.c"
+#include "Backgrounds/Room1.raw.c"
 #include "Backgrounds/master.pal.c"
 
 
@@ -35,6 +37,7 @@ void easy()
 	SetMode(0 | BG0_ENABLE | OBJ_ENABLE | OBJ_MAP_1D);
 	//SetMode(| BG1_ENABLE | BG2_ENABLE | BG3_ENABLE);
 	loadHud();
+	loadRoom1();
 	easySprites();
 }
 
@@ -63,6 +66,32 @@ void loadHud()
 	
 	DMAFastCopy((void*)HUD_Tiles, (void*)CharBaseBlock(0),2496/4, DMA_32NOW);
     DMAFastCopy((void*)MapData1, (void*)bg01map, 512, DMA_32NOW);
+}
+
+void loadRoom1()
+{
+	int countx = 0;
+	int county = 0;
+	
+	REG_BG1CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(2 << SCREEN_SHIFT) | 0x0;
+	for(county = 0; county <32; county++)
+	{
+		for(countx = 0; countx < 32; countx++)
+		{
+			MapData2[countx + county*32] = 0;
+		}
+	}
+
+    for(county = 0; county <20; county++)
+	{
+		for(countx = 0; countx < 30; countx++)
+		{
+			MapData2[countx + county*32] = Room1_Map[countx+county*30];
+		}
+	}
+	
+	DMAFastCopy((void*)Room1_Tiles, (void*)CharBaseBlock(0),2496/4, DMA_32NOW);
+    DMAFastCopy((void*)MapData2, (void*)bg02map, 512, DMA_32NOW);
 }
 
 int startCheck()

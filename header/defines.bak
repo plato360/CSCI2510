@@ -227,4 +227,5 @@ unsigned short MapData1[1024];
 //create a pointer to background 0 tilemap buffer
  unsigned short* bg01map =(unsigned short*)ScreenBaseBlock(3);
  void DMAFastCopy(void* source, void* dest, unsigned int count, unsigned int mode);
+
  ////////////////////////////////////////////////////////////////////////

@@ -7,3 +7,5 @@ header\splash.c
 header\Backgrounds\HUD.map.c
 header\Backgrounds\HUD.raw.c
 header\Backgrounds\master.pal.c
+header\Backgrounds\Room1.map.c
+header\Backgrounds\Room1.raw.c
