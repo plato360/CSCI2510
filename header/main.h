@@ -16,7 +16,7 @@
 
 
 
-    
+
 void loadHud();
 int startCheck();
 
@@ -34,7 +34,7 @@ void DMAFastCopy(void* source, void* dest, unsigned int count, unsigned int mode
 void easy()
 {	
 	//set video mode 0 with background 0
-	SetMode(0 | BG0_ENABLE | OBJ_ENABLE | OBJ_MAP_1D);
+	SetMode(0 | BG0_ENABLE | BG1_ENABLE | OBJ_ENABLE | OBJ_MAP_1D);
 	//SetMode(| BG1_ENABLE | BG2_ENABLE | BG3_ENABLE);
 	loadHud();
 	loadRoom1();
@@ -73,7 +73,8 @@ void loadRoom1()
 	int countx = 0;
 	int county = 0;
 	
-	REG_BG1CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(2 << SCREEN_SHIFT) | 0x0;
+    REG_BG1CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(10 << SCREEN_SHIFT) | 4 | 0x0;
+	DMAFastCopy((void*)master_Palette, (void*)BGPaletteMem,256, DMA_16NOW);
 	for(county = 0; county <32; county++)
 	{
 		for(countx = 0; countx < 32; countx++)
@@ -90,7 +91,7 @@ void loadRoom1()
 		}
 	}
 	
-	DMAFastCopy((void*)Room1_Tiles, (void*)CharBaseBlock(0),2496/4, DMA_32NOW);
+	DMAFastCopy((void*)Room1_Tiles, (void*)CharBaseBlock(1),704/4, DMA_32NOW);
     DMAFastCopy((void*)MapData2, (void*)bg02map, 512, DMA_32NOW);
 }
 
@@ -107,4 +108,3 @@ int startCheck()
 	}
 	return 0;
 }
-

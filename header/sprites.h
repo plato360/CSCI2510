@@ -344,10 +344,10 @@ int addHeart(int num)
         {
             if(cah < num)
             {
-                MapData1[countaddheart + cah * 2] = 0x0008;
-                MapData1[countaddheart + (cah * 2 + 1)] = 0x0009;
-                MapData1[countaddheart + cah * 2 + 33] = 0x00010;
-                MapData1[countaddheart + (cah * 2 + 1) + 33] = 0x000F;
+                MapData1[countaddheart + cah * 2] = 0x0001;
+                MapData1[countaddheart + (cah * 2 + 1)] = 0x0002;
+                MapData1[countaddheart + cah * 2 + 33] = 0x0004;
+                MapData1[countaddheart + (cah * 2 + 1) + 33] = 0x0003;
             }
             else
             {
@@ -361,10 +361,10 @@ int addHeart(int num)
         {
             if(cah < num)
             {
-                MapData1[countaddheart2 + cah * 2 + y*2] = 0x0008;
-                MapData1[countaddheart2 + (cah * 2 + 1 + y*2)] = 0x0009;
-                MapData1[countaddheart2 + cah * 2 + y*3 + 1 ] = 0x00010;
-                MapData1[countaddheart2 + (cah * 2 + 1) + y*3 + 1] = 0x000F;
+                MapData1[countaddheart2 + cah * 2 + y*2] = 0x0001;
+                MapData1[countaddheart2 + (cah * 2 + 1 + y*2)] = 0x0002;
+                MapData1[countaddheart2 + cah * 2 + y*3 + 1 ] = 0x00004;
+                MapData1[countaddheart2 + (cah * 2 + 1) + y*3 + 1] = 0x0003;
             }
             else
             {

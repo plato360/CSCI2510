@@ -7,6 +7,7 @@
 #include "solder7.h"
 
 int checka = 0;
+int animationHolder = 0;
 void easySprites();
 void defaultSprite(int num);
 void MoveSprite(int num);
@@ -90,7 +91,7 @@ void easySprites()
 		defaultSprite(count);
 		sprites[count].attribute0 = COLOR_256 | 240;
 		sprites[count].attribute1 = SIZE_16 | 160;
-		sprites[count].attribute2 = 0x30;
+		sprites[count].attribute2 = 0xC00;
 		
 	}
 	mysprites[0].x = 40;
@@ -165,13 +166,15 @@ void runSprite()
 	{
 		if(Pressed(BUTTON_A))
 		{
+			if (checka < 1)
+				animationHolder = mysprites[0].animation;
 			checka = 1;
 			attack2(0);
 		}
 		else if( checka > 0)
 		{
 			checka = 0;
-			changeAnimation(0,0);
+			changeAnimation(animationHolder,0);
 		}
     
 		if(Pressed(BUTTON_LEFT))
@@ -341,10 +344,10 @@ int addHeart(int num)
         {
             if(cah < num)
             {
-                MapData1[countaddheart + cah * 2] = 0x0008;
-                MapData1[countaddheart + (cah * 2 + 1)] = 0x0009;
-                MapData1[countaddheart + cah * 2 + 33] = 0x00010;
-                MapData1[countaddheart + (cah * 2 + 1) + 33] = 0x000F;
+                MapData1[countaddheart + cah * 2] = 0x0001;
+                MapData1[countaddheart + (cah * 2 + 1)] = 0x0002;
+                MapData1[countaddheart + cah * 2 + 33] = 0x0004;
+                MapData1[countaddheart + (cah * 2 + 1) + 33] = 0x0003;
             }
             else
             {
