@@ -21,13 +21,12 @@ int main()
 
 void Initialize() //Initializes variables
 {
-    gameState = STATE_INGAME;
+    gameState = STATE_TITLE;
    	easy();            //located in main.h
 }
 
 void LoadContent() //Loads the initial content
 {
-	sound();
     if (gameState == STATE_TITLE)
         LoadInitialTitleScreen();
     
@@ -47,6 +46,8 @@ void Update() //Detect Button Presses and Update Info
 		  aicount = 0;
         }
     }
+	startCheck();
+	
 }
 
 void Draw() //Draw updates to the screen

@@ -16,7 +16,7 @@
 
     
 void loadHud();
-
+int startCheck();
 
 void DMAFastCopy(void* source, void* dest, unsigned int count, unsigned int mode)
 {
@@ -63,5 +63,19 @@ void loadHud()
 	
 	DMAFastCopy((void*)HUD_Tiles, (void*)CharBaseBlock(0),2496/4, DMA_32NOW);
     DMAFastCopy((void*)MapData1, (void*)bg01map, 512, DMA_32NOW);
+}
+
+int startCheck()
+{
+	CheckButtons();
+	if(Pressed(BUTTON_START))
+	{
+		if (gameState == STATE_INGAME)
+			gameState = STATE_TITLE;
+		else
+			gameState = STATE_INGAME;
+		activebutton(BUTTON_START);
+	}
+	return 0;
 }
 
