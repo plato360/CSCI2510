@@ -7,6 +7,7 @@
 #include "solder7.h"
 
 int checka = 0;
+int animationHolder = 0;
 void easySprites();
 void defaultSprite(int num);
 void MoveSprite(int num);
@@ -165,13 +166,15 @@ void runSprite()
 	{
 		if(Pressed(BUTTON_A))
 		{
+			if (checka < 1)
+				animationHolder = mysprites[0].animation;
 			checka = 1;
 			attack2(0);
 		}
 		else if( checka > 0)
 		{
 			checka = 0;
-			changeAnimation(0,0);
+			changeAnimation(animationHolder,0);
 		}
     
 		if(Pressed(BUTTON_LEFT))
