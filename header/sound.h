@@ -70,7 +70,7 @@ void MyHandler(void)
 
 void sound()
 {
-    u16 samplerate = 704500;
+    u16 samplerate = (u16)704500;
     u16 samplelen = 27500;
     u16 samples;
 
@@ -113,7 +113,7 @@ void sound()
 
 void wack()
 {	
-	u16 samplerate = 704500;
+	u16 samplerate = (u16)704500;
     u16 samplelen = 341;
     u16 samples;
 

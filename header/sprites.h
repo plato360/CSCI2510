@@ -328,7 +328,7 @@ int attack2(int num)
 int attack(int ani,int num)
 {
     if (immune > 0)
-        return;
+        return 0;
     immune = 60;
     if(mysprites[num].animation == 3 || mysprites[num].animation == 6);
     else
@@ -351,7 +351,6 @@ int attack(int ani,int num)
 int addHeart(int num)
 {
     int countaddheart = 20;
-    int countaddheart2 = 10;
     int y = 32;
     int cah = 0;
     for(cah = 0;cah < 10; cah++)

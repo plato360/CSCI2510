@@ -37,9 +37,7 @@ typedef unsigned long u32;
 #include "maintheme.h"
 #include "attack.h"
 
-void wack();
-void MyHandler(void);
-void sound();
+
 
 //global variables
 u16 len = 0;
@@ -72,8 +70,8 @@ void MyHandler(void)
 
 void sound()
 {
-    u16 samplerate = 704500;
-    u16 samplelen = 27500;
+    u16 samplerate = (u16)704500;
+    u16 samplelen = (u16)27500;
     u16 samples;
 
 	
@@ -114,7 +112,7 @@ void sound()
 }
 
 void wack()
-{
+{	
 	u16 samplerate = 704500;
     u16 samplelen = 341;
     u16 samples;
