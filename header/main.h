@@ -47,6 +47,7 @@ void easy()
 	easySprites();
 	initializeBackgrounds();
 	
+	
 }
 
 void loadHud()

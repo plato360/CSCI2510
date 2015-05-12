@@ -29,9 +29,9 @@ void LoadContent() //Loads the initial content
 {
     if (gameState == STATE_TITLE)
         LoadInitialTitleScreen();
-	
 	loadHud();
 	loadRoom1();
+	
     
 }
 
@@ -41,9 +41,10 @@ void Update() //Detect Button Presses and Update Info
         UpdateTitleScreen();
     else if (gameState == STATE_INGAME) {
         runSprite();          //moves sprite accross the screen
+		attackStar(0);
 		AI_Patrol(0, 20, 120, 0, 1, 1);
 		aicount++;
-        if(aicount > 5)
+      if(aicount > 5)
         {
 		  AI_follow(1,2);
 		  aicount = 0;

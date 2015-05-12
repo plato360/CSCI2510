@@ -13,8 +13,13 @@
 #include "vilan 25.h"
 #include "vilan 26.h"
 
+#include "star.h"
+
 int checka = 0;
 int animationHolder = 0;
+int attackStarCheck = 0;
+int starAni = 0;
+int starFlip = 0;
 void easySprites();
 void defaultSprite(int num);
 void MoveSprite(int num);
@@ -34,6 +39,7 @@ int changeAnimation(int animation, int num);
 int flipSprite(int flip, int num);
 int attack(int ani, int num);
 int attack2(int num);
+int attackStar(int num);
 
 int AI_Patrol(int x1, int y1, int x2, int y2, int character, int num);
 int AI_follow(int character, int num);
@@ -102,6 +108,8 @@ void easySprites()
 	setSpriteData(12,Vilan25Data);
 	setSpriteData(13,Vilan26Data);
 	
+	setSpriteData(63,starData);
+	
 	for (count = 0; count < 128; count++)
 	{
 		defaultSprite(count);
@@ -120,7 +128,11 @@ void easySprites()
 	mysprites[2].y = 0;
 	mysprites[2].health = 1;
 	changeAnimation(7,2);
+	changeAnimation(63,90);
+	mysprites[3].x = 10;
+	mysprites[3].y = 10;
 	UpdateSpriteMemory();
+	
 }
 
 void defaultSprite(int num)
@@ -195,7 +207,8 @@ void runSprite()
 			if (checka < 1)
 				animationHolder = mysprites[0].animation;
 			checka = 1;
-			attack2(0);
+			attackStarCheck = 1;
+			//attack2(0);
 		}
 		else if( checka > 0)
 		{
@@ -206,6 +219,7 @@ void runSprite()
 		if(Pressed(BUTTON_LEFT))
 		{
 			flipSprite(0,0);
+			mysprites[0].flip = 0;
 			if (mysprites[0].animation == 4)
 				changeAnimation(5,0);
 			else
@@ -217,6 +231,7 @@ void runSprite()
 		if(Pressed(BUTTON_RIGHT))
 		{
 			flipSprite(1,0);
+			mysprites[0].flip = 1;
 			if (mysprites[0].animation == 4)
 				changeAnimation(5,0);
 			else
@@ -227,6 +242,7 @@ void runSprite()
 		if(Pressed(BUTTON_UP))
 		{
 			flipSprite(1,0);
+			mysprites[0].flip = 1;
 			if (mysprites[0].animation == 1)
 				changeAnimation(2,0);
 			else
@@ -237,6 +253,7 @@ void runSprite()
 		if(Pressed(BUTTON_DOWN))
 		{
 			flipSprite(0,0);
+			mysprites[0].flip = 0;
 			if (mysprites[0].animation == 1)
 				changeAnimation(2,0);
 			else
@@ -343,6 +360,99 @@ int attack2(int num)
     wack();
     return 0;
 }
+int attackStar(int num)
+{
+	if(attackStarCheck > 0)
+	{
+		int attack2count = 1;
+		if (starAni < 4)
+		{
+			if(starFlip == 0)
+			{
+				if(mysprites[90].y <= 156)
+				{
+					mysprites[90].y +=4;
+					MoveSprite(90);
+					for (attack2count = 1; attack2count < 128; attack2count++)
+					{
+						if(abs(mysprites[attack2count].x - mysprites[90].x) < 18 && abs(mysprites[attack2count].y - mysprites[90].y) < 18)
+							mysprites[attack2count].health--;
+						if(mysprites[attack2count].health < 0)
+							mysprites[attack2count].alive = -1;
+					}
+				}
+				else
+					attackStarCheck = 0;
+			}
+			else
+			{
+				if(mysprites[90].y >= 4)
+				{
+					mysprites[90].y -=4;
+					MoveSprite(90);
+					for (attack2count = 1; attack2count < 128; attack2count++)
+					{
+						if(abs(mysprites[attack2count].x - mysprites[90].x) < 18 && abs(mysprites[attack2count].y - mysprites[90].y) < 18)
+							mysprites[attack2count].health--;
+						if(mysprites[attack2count].health < 0)
+							mysprites[attack2count].alive = -1;
+					}
+				}
+				else
+					attackStarCheck = 0;
+			}
+		}
+		else
+		{
+			if(starFlip == 1)
+			{
+				if(mysprites[90].x <= 236)
+				{
+					mysprites[90].x +=4;
+					MoveSprite(90);
+					for (attack2count = 1; attack2count < 128; attack2count++)
+					{
+						if(abs(mysprites[attack2count].x - mysprites[90].x) < 18 && abs(mysprites[attack2count].y - mysprites[90].y) < 18)
+							mysprites[attack2count].health--;
+						if(mysprites[attack2count].health < 0)
+							mysprites[attack2count].alive = -1;
+					}
+				}
+				else
+					attackStarCheck = 0;
+			}
+			else
+			{
+				if(mysprites[90].x >= 4)
+				{
+					mysprites[90].x -=4;
+					MoveSprite(90);
+					for (attack2count = 1; attack2count < 128; attack2count++)
+					{
+						if(abs(mysprites[attack2count].x - mysprites[90].x) < 18 && abs(mysprites[attack2count].y - mysprites[90].y) < 18)
+							mysprites[attack2count].health--;
+						if(mysprites[attack2count].health < 0)
+							mysprites[attack2count].alive = -1;
+					}
+				}
+				else
+					attackStarCheck = 0;
+			}
+		}
+	}
+	else
+	{
+		moveSprite(240,160,90);
+		MoveSprite(90);
+		mysprites[90].x = mysprites[num].x;
+		mysprites[90].y = mysprites[num].y;
+		starAni = mysprites[num].animation % 7;
+		starFlip = mysprites[num].flip;
+	}
+
+	return 0;
+}
+
 int attack(int ani,int num)
 {
     if (immune > 0)
