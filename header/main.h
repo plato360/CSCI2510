@@ -134,6 +134,166 @@ void loadRoom1()
 	
 	DMAFastCopy((void*)Room1hitmap_Tiles, (void*)CharBaseBlock(3),640/4, DMA_32NOW);
     DMAFastCopy((void*)MapData4, (void*)bg04map, 512, DMA_32NOW);
+    
+    loadRoomLeft(Room1hitmap_Map);
+    loadRoomLeft(Room1hitmap_Map);
+    loadRoomRight(Room1hitmap_Map);
+    loadRoomDown(Room1hitmap_Map);
+    loadRoomDown(Room1hitmap_Map);
+    loadRoomUp(Room1hitmap_Map);
+    loadRoomRight(Room1hitmap_Map);
+}
+
+int loadRoomRight(const unsigned short* roomLoaded) {
+
+    int loop, loopy;
+    int cy;
+    for (loop = 0; loop < 30; loop++) {
+        cy = cvprev + 1;
+        if (cy > 31)
+            cy = 0;
+        for (loopy = 0; loopy < 20; loopy++) {
+            bg02map[cnext + cy*32] = roomLoaded[loop+loopy*30];
+            cy++;
+            if (cy > 31)
+                cy = 0;
+        }
+        chofs += 2;
+        WaitVBlank();
+        REG_BG1HOFS = chofs;
+        chofs += 2;
+        WaitVBlank();
+        REG_BG1HOFS = chofs;
+        chofs += 2;
+        WaitVBlank();
+        REG_BG1HOFS = chofs;
+        chofs += 2;
+        WaitVBlank();
+        REG_BG1HOFS = chofs;
+        cnext++;
+        cprev++;
+        if (cnext == 32) {
+            cnext = 0;
+        }
+        if (cprev == 32) {
+            cprev = 0;
+        }
+        if (chofs >= 256) {
+            chofs = 0;
+            REG_BG1HOFS = 0;
+        }
+    }
+}
+
+int loadRoomLeft(const unsigned short* roomLoaded) {
+
+    int loop, loopy;
+    int cy;
+    for (loop = 29; loop >= 0; loop--) {
+        cy = cvprev + 1;
+        if (cy > 31)
+            cy = 0;
+        for (loopy = 0; loopy < 20; loopy++) {
+            bg02map[cprev + cy*32] = roomLoaded[loop+loopy*30];
+            cy++;
+            if (cy > 31)
+                cy = 0;
+        }
+        chofs -= 2;
+        WaitVBlank();
+        REG_BG1HOFS = chofs;
+        chofs -= 2;
+        WaitVBlank();
+        REG_BG1HOFS = chofs;
+        chofs -= 2;
+        WaitVBlank();
+        REG_BG1HOFS = chofs;
+        chofs -= 2;
+        WaitVBlank();
+        REG_BG1HOFS = chofs;
+        cnext--;
+        cprev--;
+        if (cnext < 0) {
+            cnext = 31;
+        }
+        if (cprev < 0) {
+            cprev = 31;
+        }
+
+    }
+}
+int loadRoomUp(const unsigned short* roomLoaded) {
+
+    int loop, loopx, cx;
+    for (loop = 19; loop >= 0; loop--) {
+        cx = cprev + 1;
+        if (cx > 31)
+            cx = 0;
+        for (loopx = 0; loopx < 30; loopx++) {
+            bg02map[cvprev*32 + cx] = roomLoaded[loopx+loop*30];
+            cx++;
+            if (cx > 31)
+                cx = 0;
+        }
+        cvofs -= 2;
+        WaitVBlank();
+        REG_BG1VOFS = cvofs;
+        cvofs -= 2;
+        WaitVBlank();
+        REG_BG1VOFS = cvofs;
+        cvofs -= 2;
+        WaitVBlank();
+        REG_BG1VOFS = cvofs;
+        cvofs -= 2;
+        WaitVBlank();
+        REG_BG1VOFS = cvofs;
+        cvnext--;
+        cvprev--;
+        if (cvnext < 0) {
+            cvnext = 31;
+        }
+        if (cvprev < 0) {
+            cvprev = 31;
+        }
+
+    }
+}
+
+int loadRoomDown(const unsigned short* roomLoaded) {
+
+    int loop, loopx, cx;
+    for (loop = 0; loop < 20; loop++) {
+        cx = cprev + 1;
+        if (cx > 31)
+            cx = 0;
+        for (loopx = 0; loopx < 30; loopx++) {
+            bg02map[cvnext*32 + cx] = roomLoaded[loopx+loop*30];
+            cx++;
+            if (cx > 31)
+                cx = 0;
+        }
+        cvofs += 2;
+        WaitVBlank();
+        REG_BG1VOFS = cvofs;
+        cvofs += 2;
+        WaitVBlank();
+        REG_BG1VOFS = cvofs;
+        cvofs += 2;
+        WaitVBlank();
+        REG_BG1VOFS = cvofs;
+        cvofs += 2;
+        WaitVBlank();
+        REG_BG1VOFS = cvofs;
+        cvnext++;
+        cvprev++;
+        if (cvnext > 31) {
+            cvnext = 0;
+        }
+        if (cvprev > 31) {
+            cvprev = 0;
+        }
+
+    }
 }
 
 int startCheck()

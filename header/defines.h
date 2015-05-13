@@ -237,5 +237,10 @@ unsigned short* bgm1map =(unsigned short*)ScreenBaseBlock(10);
  void DMAFastCopy(void* source, void* dest, unsigned int count, unsigned int mode);
  
  int immune = 0;
-
+int chofs = 0;
+int cnext = 30;
+int cprev = 31;
+int cvofs = 0;
+int cvnext = 20;
+int cvprev = 31;
  ////////////////////////////////////////////////////////////////////////
