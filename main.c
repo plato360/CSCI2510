@@ -43,20 +43,20 @@ void Update() //Detect Button Presses and Update Info
         runSprite();          //moves sprite accross the screen
 		attackStar(0);
 		insertHeart(50,50);
-		AI_Patrol(0, 20, 120, 0, 1, 1);
+		AI_Patrol(16, 20, 120, 0, 1, 1);
+		AI_Patrol(121, 20, 200, 0, 2, 10);
 		aicount++;
       if(aicount > 5)
         {
 		  AI_follow(1,2);
 		  AI_follow(1,3);
-		  AI_follow(1,3);
 		  AI_follow(1,4);
 		  AI_follow(1,5);
 		  AI_follow(1,6);
-		  AI_follow(1,7);
+		  AI_follow(2,7);
 		  AI_follow(2,8);
 		  AI_follow(2,9);
-		  AI_follow(2,10);
+
 		  aicount = 0;
         }
     }
