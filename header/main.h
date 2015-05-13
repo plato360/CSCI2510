@@ -135,13 +135,13 @@ void loadRoom1()
 	DMAFastCopy((void*)Room1hitmap_Tiles, (void*)CharBaseBlock(3),640/4, DMA_32NOW);
     DMAFastCopy((void*)MapData4, (void*)bg04map, 512, DMA_32NOW);
     
-    loadRoomLeft(Room1hitmap_Map);
-    loadRoomLeft(Room1hitmap_Map);
-    loadRoomRight(Room1hitmap_Map);
-    loadRoomDown(Room1hitmap_Map);
-    loadRoomDown(Room1hitmap_Map);
-    loadRoomUp(Room1hitmap_Map);
-    loadRoomRight(Room1hitmap_Map);
+//    loadRoomLeft(Room1hitmap_Map);
+//    loadRoomLeft(Room1hitmap_Map);
+//    loadRoomRight(Room1hitmap_Map);
+//    loadRoomDown(Room1hitmap_Map);
+//   loadRoomDown(Room1hitmap_Map);
+//    loadRoomUp(Room1hitmap_Map);
+//    loadRoomRight(Room1hitmap_Map);
 }
 
 int loadRoomRight(const unsigned short* roomLoaded) {
@@ -183,6 +183,7 @@ int loadRoomRight(const unsigned short* roomLoaded) {
             REG_BG1HOFS = 0;
         }
     }
+	return 0;
 }
 
 int loadRoomLeft(const unsigned short* roomLoaded) {
@@ -221,6 +222,7 @@ int loadRoomLeft(const unsigned short* roomLoaded) {
         }
 
     }
+	return 0;
 }
 int loadRoomUp(const unsigned short* roomLoaded) {
 
@@ -257,6 +259,7 @@ int loadRoomUp(const unsigned short* roomLoaded) {
         }
 
     }
+	return 0;
 }
 
 int loadRoomDown(const unsigned short* roomLoaded) {
@@ -294,6 +297,7 @@ int loadRoomDown(const unsigned short* roomLoaded) {
         }
 
     }
+	return 0;
 }
 
 int startCheck()
