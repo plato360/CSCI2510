@@ -114,7 +114,7 @@ void loadRoom1()
 	DMAFastCopy((void*)Room1_Tiles, (void*)CharBaseBlock(1),704/4, DMA_32NOW);
     DMAFastCopy((void*)MapData2, (void*)bg02map, 512, DMA_32NOW);
     
-    REG_BG3CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(26 << SCREEN_SHIFT) | 12 | 0x0;
+    REG_BG3CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(26 << SCREEN_SHIFT) | 12 | 0x3;
 	DMAFastCopy((void*)master_Palette, (void*)BGPaletteMem,256, DMA_16NOW);
 	for(county = 0; county <32; county++)
 	{
