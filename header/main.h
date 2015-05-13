@@ -93,7 +93,7 @@ void loadRoom1()
 	int countx = 0;
 	int county = 0;
 	
-    REG_BG1CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(10 << SCREEN_SHIFT) | 4 | 0x0;
+    REG_BG1CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(10 << SCREEN_SHIFT) | 4 | 0x1;
 	DMAFastCopy((void*)master_Palette, (void*)BGPaletteMem,256, DMA_16NOW);
 	for(county = 0; county <32; county++)
 	{

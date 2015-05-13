@@ -123,7 +123,7 @@ void easySprites()
 		defaultSprite(count);
 		sprites[count].attribute0 = COLOR_256 | 240;
 		sprites[count].attribute1 = SIZE_16 | 160;
-		sprites[count].attribute2 = 0xC00;
+		sprites[count].attribute2 = (((3)&3)<<10);
 		
 	}
 	mysprites[0].x = 40;
@@ -358,7 +358,7 @@ int moveSprite(int x, int y, int num)
 }
 int changeAnimation(int animation, int num)
 {
-		sprites[num].attribute2 = 16 * animation;
+		sprites[num].attribute2 = ((animation*16)&0x3FF) | (((1)&3)<<10);
 		mysprites[num].animation = animation;
 		return 0;
 }

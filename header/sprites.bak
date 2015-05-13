@@ -17,6 +17,11 @@
 #include "star.h"
 #include "heart.h"
 
+
+
+
+
+
 int checka = 0;
 int animationHolder = 0;
 int attackStarCheck = 0;
@@ -118,7 +123,7 @@ void easySprites()
 		defaultSprite(count);
 		sprites[count].attribute0 = COLOR_256 | 240;
 		sprites[count].attribute1 = SIZE_16 | 160;
-		sprites[count].attribute2 = 0xC00;
+		sprites[count].attribute2 = (((3)&3)<<10);
 		
 	}
 	mysprites[0].x = 40;
@@ -353,7 +358,7 @@ int moveSprite(int x, int y, int num)
 }
 int changeAnimation(int animation, int num)
 {
-		sprites[num].attribute2 = 16 * animation;
+		sprites[num].attribute2 = ((animation*16)&0x3FF) | (((1)&3)<<10);
 		mysprites[num].animation = animation;
 		return 0;
 }
@@ -423,7 +428,7 @@ int attackStar(int num)
 				{
 					mysprites[90].y -=4;
 					MoveSprite(90);
-					for (attack2count = 1; attack2count < 128; attack2count++)
+					for (attack2count = 1; attack2count < 90; attack2count++)
 					{
 						if(abs(mysprites[attack2count].x - mysprites[90].x) < 18 && abs(mysprites[attack2count].y - mysprites[90].y) < 18)
 							mysprites[attack2count].health--;
@@ -443,7 +448,7 @@ int attackStar(int num)
 				{
 					mysprites[90].x +=4;
 					MoveSprite(90);
-					for (attack2count = 1; attack2count < 128; attack2count++)
+					for (attack2count = 1; attack2count < 90; attack2count++)
 					{
 						if(abs(mysprites[attack2count].x - mysprites[90].x) < 18 && abs(mysprites[attack2count].y - mysprites[90].y) < 18)
 							mysprites[attack2count].health--;
@@ -460,7 +465,7 @@ int attackStar(int num)
 				{
 					mysprites[90].x -=4;
 					MoveSprite(90);
-					for (attack2count = 1; attack2count < 128; attack2count++)
+					for (attack2count = 1; attack2count < 90; attack2count++)
 					{
 						if(abs(mysprites[attack2count].x - mysprites[90].x) < 18 && abs(mysprites[attack2count].y - mysprites[90].y) < 18)
 							mysprites[attack2count].health--;
