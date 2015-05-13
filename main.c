@@ -42,11 +42,17 @@ void Update() //Detect Button Presses and Update Info
     else if (gameState == STATE_INGAME) {
         runSprite();          //moves sprite accross the screen
 		attackStar(0);
+		insertHeart(50,50);
 		AI_Patrol(0, 20, 120, 0, 1, 1);
 		aicount++;
       if(aicount > 5)
         {
 		  AI_follow(1,2);
+		  AI_follow(1,3);
+		  AI_follow(1,3);
+		  AI_follow(1,4);
+		  AI_follow(1,5);
+		  AI_follow(1,6);
 		  aicount = 0;
         }
     }

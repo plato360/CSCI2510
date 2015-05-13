@@ -27,7 +27,16 @@
 #include "Backgrounds/Room1hitmap.raw.c"
 #include "Backgrounds/master.pal.c"
 
+#include "Backgrounds/menu/menu.pal.c"
+#include "Backgrounds/menu/menu.map.c"
+#include "Backgrounds/menu/menu.raw.c"
+
+#include "Backgrounds/menu2/menu2.pal.c"
+#include "Backgrounds/menu2/menu2.map.c"
+#include "Backgrounds/menu2/menu2.raw.c"
+
 void loadHud();
+void loadMenu();
 int startCheck();
 int initializeBackgrounds();
 
@@ -133,9 +142,16 @@ int startCheck()
 	if(Pressed(BUTTON_START))
 	{
 		if (gameState == STATE_INGAME)
+		{
 			gameState = STATE_TITLE;
+			initializeBackgrounds();
+		}
 		else
+		{
 			gameState = STATE_INGAME;
+			loadHud();
+			loadRoom1();
+		}
 		activebutton(BUTTON_START);
 		return 1;
 	}
@@ -212,4 +228,48 @@ int initializeBackgrounds()
 	DMAFastCopy((void*)blank_Tiles, (void*)CharBaseBlock(3),992, DMA_32NOW);
 	return 0;
 }
+
+void loadMenu()
+{
+	int countx = 0;
+	int county = 0;
+	
+	REG_BG0CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(2 << SCREEN_SHIFT) | 0x0;
+	REG_BG1CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(10 << SCREEN_SHIFT) | 0x4;
+	
+	DMAFastCopy((void*)menu_Palette, (void*)BGPaletteMem,256, DMA_16NOW);
+	DMAFastCopy((void*)menu_Tiles, (void*)CharBaseBlock(0),768, DMA_32NOW);
+	DMAFastCopy((void*)menu2_Tiles, (void*)CharBaseBlock(1),128, DMA_32NOW);
+	
+	for(county = 0; county <32; county++)
+	{
+		for(countx = 0; countx < 32; countx++)
+		{
+			MapData1[countx + county*32] = 0;
+		}
+	}
+
+
+    for(county = 0; county <20; county++)
+	{
+		for(countx = 0; countx < 30; countx++)
+		{
+			MapData1[countx + county*32] = menu2_Map[countx+county*30];
+		}
+	}
+	
+    DMAFastCopy((void*)MapData1, (void*)bgm1map, 512, DMA_32NOW);
+	
+	for(county = 0; county <20; county++)
+	{
+		for(countx = 0; countx < 30; countx++)
+		{
+			MapData1[countx + county*32] = menu_Map[countx+county*30];
+		}
+	}
+	
+    DMAFastCopy((void*)MapData1, (void*)bgm0map, 512, DMA_32NOW);
+
+}
+
 

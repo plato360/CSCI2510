@@ -13,7 +13,14 @@
 #include "vilan 25.h"
 #include "vilan 26.h"
 
+
 #include "star.h"
+#include "heart.h"
+
+
+
+
+
 
 int checka = 0;
 int animationHolder = 0;
@@ -108,6 +115,7 @@ void easySprites()
 	setSpriteData(12,Vilan25Data);
 	setSpriteData(13,Vilan26Data);
 	
+	setSpriteData(62,heartData);
 	setSpriteData(63,starData);
 	
 	for (count = 0; count < 128; count++)
@@ -128,7 +136,34 @@ void easySprites()
 	mysprites[2].y = 0;
 	mysprites[2].health = 1;
 	changeAnimation(7,2);
+	
+	mysprites[3].x = 150;
+	mysprites[3].y = 50;
+	mysprites[3].health = 1;
+	changeAnimation(7,3);
+	
+	mysprites[4].x = 100;
+	mysprites[4].y = 100;
+	mysprites[4].health = 1;
+	changeAnimation(7,4);
+	
+	mysprites[5].x = 120;
+	mysprites[5].y = 80;
+	mysprites[5].health = 1;
+	changeAnimation(7,5);
+	
+	mysprites[6].x = 90;
+	mysprites[6].y = 90;
+	mysprites[6].health = 1;
+	changeAnimation(7,6);
+	
+	mysprites[7].x = 80;
+	mysprites[7].y = 80;
+	mysprites[7].health = 1;
+	changeAnimation(7,7);
+	
 	changeAnimation(63,90);
+	changeAnimation(62,91);
 	mysprites[3].x = 10;
 	mysprites[3].y = 10;
 	UpdateSpriteMemory();
@@ -207,14 +242,17 @@ void runSprite()
 			if (checka < 1)
 				animationHolder = mysprites[0].animation;
 			checka = 1;
-			attackStarCheck = 1;
-			//attack2(0);
+			attack2(0);
 		}
 		else if( checka > 0)
 		{
 			checka = 0;
 			changeAnimation(animationHolder,0);
 		}
+		
+		if(Pressed(BUTTON_B))
+			attackStarCheck = 1;
+		
     
 		if(Pressed(BUTTON_LEFT))
 		{
@@ -350,7 +388,7 @@ int attack2(int num)
         else
             changeAnimation(num*8 + 6,num);
     }
-    for (attack2count = 1; attack2count < 128; attack2count++)
+    for (attack2count = 1; attack2count < 90; attack2count++)
     {
         if(abs(mysprites[attack2count].x - mysprites[0].x) < 18 && abs(mysprites[attack2count].y - mysprites[0].y) < 18)
             mysprites[attack2count].health--;
@@ -373,7 +411,7 @@ int attackStar(int num)
 				{
 					mysprites[90].y +=4;
 					MoveSprite(90);
-					for (attack2count = 1; attack2count < 128; attack2count++)
+					for (attack2count = 1; attack2count < 90; attack2count++)
 					{
 						if(abs(mysprites[attack2count].x - mysprites[90].x) < 18 && abs(mysprites[attack2count].y - mysprites[90].y) < 18)
 							mysprites[attack2count].health--;
@@ -390,7 +428,7 @@ int attackStar(int num)
 				{
 					mysprites[90].y -=4;
 					MoveSprite(90);
-					for (attack2count = 1; attack2count < 128; attack2count++)
+					for (attack2count = 1; attack2count < 90; attack2count++)
 					{
 						if(abs(mysprites[attack2count].x - mysprites[90].x) < 18 && abs(mysprites[attack2count].y - mysprites[90].y) < 18)
 							mysprites[attack2count].health--;
@@ -410,7 +448,7 @@ int attackStar(int num)
 				{
 					mysprites[90].x +=4;
 					MoveSprite(90);
-					for (attack2count = 1; attack2count < 128; attack2count++)
+					for (attack2count = 1; attack2count < 90; attack2count++)
 					{
 						if(abs(mysprites[attack2count].x - mysprites[90].x) < 18 && abs(mysprites[attack2count].y - mysprites[90].y) < 18)
 							mysprites[attack2count].health--;
@@ -427,7 +465,7 @@ int attackStar(int num)
 				{
 					mysprites[90].x -=4;
 					MoveSprite(90);
-					for (attack2count = 1; attack2count < 128; attack2count++)
+					for (attack2count = 1; attack2count < 90; attack2count++)
 					{
 						if(abs(mysprites[attack2count].x - mysprites[90].x) < 18 && abs(mysprites[attack2count].y - mysprites[90].y) < 18)
 							mysprites[attack2count].health--;
@@ -685,6 +723,24 @@ int AI_follow(int character, int num)
     }
     MoveSprite(num);
     return 0;
+}
+
+
+int insertHeart(int x, int y)
+{
+	if(mysprites[91].alive > 0)
+	{
+		moveSprite(x,y,91);
+		MoveSprite(91);
+		if(abs(x - mysprites[0].x) < 10 && abs(y - mysprites[0].y) < 10)
+		{
+			addHeart(++mysprites[0].health);
+			moveSprite(240,160,91);
+			MoveSprite(91);
+			mysprites[91].alive = 0;
+		}
+	}
+	return 0;
 }
 
 /*
