@@ -162,6 +162,7 @@ void easySprites()
 	mysprites[7].health = 1;
 	changeAnimation(7,7);
 	
+	
 	changeAnimation(63,90);
 	changeAnimation(62,91);
 	mysprites[3].x = 10;

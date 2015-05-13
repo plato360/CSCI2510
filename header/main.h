@@ -149,8 +149,16 @@ int startCheck()
 		else
 		{
 			gameState = STATE_INGAME;
+			mysprites[88].x = 240;
+			mysprites[88].y = 160;
+			mysprites[89].x = 240;
+			mysprites[89].y = 160;
+			MoveSprite(88);
+			MoveSprite(89);
+			UpdateSpriteMemory();
 			loadHud();
 			loadRoom1();
+			addHeart(mysprites[0].health);
 		}
 		activebutton(BUTTON_START);
 		return 1;
@@ -269,6 +277,16 @@ void loadMenu()
 	}
 	
     DMAFastCopy((void*)MapData1, (void*)bgm0map, 512, DMA_32NOW);
+	
+	mysprites[88].x = 1;
+	mysprites[88].y = 16*3;
+	mysprites[89].x = 1;
+	mysprites[89].y = 16*7;
+	sprites[88].attribute2 = ((63*16)&0x3FF) | (((0)&3)<<10);
+	sprites[89].attribute2 = ((62*16)&0x3FF) | (((0)&3)<<10);
+	MoveSprite(88);
+	MoveSprite(89);
+	UpdateSpriteMemory();
 
 }
 
