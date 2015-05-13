@@ -12,7 +12,13 @@
 #include "vilan 24.h"
 #include "vilan 25.h"
 #include "vilan 26.h"
-
+#include "vilan 30.h"
+#include "vilan 31.h"
+#include "vilan 32.h"
+#include "vilan 33.h"
+#include "vilan 34.h"
+#include "vilan 35.h"
+#include "vilan 36.h"
 
 #include "star.h"
 #include "heart.h"
@@ -115,6 +121,14 @@ void easySprites()
 	setSpriteData(12,Vilan25Data);
 	setSpriteData(13,Vilan26Data);
 	
+	setSpriteData(14,Vilan30Data);
+	setSpriteData(15,Vilan31Data);
+	setSpriteData(16,Vilan32Data);
+	setSpriteData(17,Vilan33Data);
+	setSpriteData(18,Vilan34Data);
+	setSpriteData(19,Vilan35Data);
+	setSpriteData(20,Vilan36Data);
+	
 	setSpriteData(62,heartData);
 	setSpriteData(63,starData);
 	
@@ -161,6 +175,22 @@ void easySprites()
 	mysprites[7].y = 80;
 	mysprites[7].health = 1;
 	changeAnimation(7,7);
+	
+	mysprites[8].x = 64;
+	mysprites[8].y = 24;
+	mysprites[8].health = 1;
+	changeAnimation(14,8);
+	
+	mysprites[9].x = 38;
+	mysprites[9].y = 47;
+	mysprites[9].health = 1;
+	changeAnimation(14,9);
+	
+	mysprites[10].x = 91;
+	mysprites[10].y = 86;
+	mysprites[10].health = 1;
+	changeAnimation(14,10);
+	
 	
 	changeAnimation(63,90);
 	changeAnimation(62,91);
@@ -349,7 +379,7 @@ int moveSprite(int x, int y, int num)
 {
     int xtile = x / 8;
     int ytile = y / 8;
-    if (x < 0 || y < 0 || x < 240 && (bg04map[ytile*32+xtile] < 9 || bg04map[(ytile+1)*32+xtile] < 9 ||  bg04map[(ytile+2)*32+xtile] < 9 || bg04map[ytile*32+(xtile+1)] < 9 || bg04map[(ytile+1)*32+(xtile+1) || bg04map[(ytile+2)*32+(xtile+1)] < 9)
+    if (x < 0 || y < 0 || x < 240 && (bg04map[ytile*32+xtile] < 9 || bg04map[(ytile+1)*32+xtile] < 9 ||  bg04map[(ytile+2)*32+xtile] < 9 || bg04map[ytile*32+(xtile+1)] < 9 || bg04map[(ytile+1)*32+(xtile+1)] < 9 || bg04map[(ytile+2)*32+(xtile+1)] < 9))
         return 0;
     
 	mysprites[num].x = x;

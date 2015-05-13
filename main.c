@@ -53,6 +53,10 @@ void Update() //Detect Button Presses and Update Info
 		  AI_follow(1,4);
 		  AI_follow(1,5);
 		  AI_follow(1,6);
+		  AI_follow(1,7);
+		  AI_follow(2,8);
+		  AI_follow(2,9);
+		  AI_follow(2,10);
 		  aicount = 0;
         }
     }

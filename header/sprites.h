@@ -13,6 +13,13 @@
 #include "vilan 25.h"
 #include "vilan 26.h"
 
+#include "villan30.h"
+#include "villan31.h"
+#include "villan32.h"
+#include "villan33.h"
+#include "villan34.h"
+#include "villan35.h"
+#include "villan36.h"
 
 #include "star.h"
 #include "heart.h"
@@ -115,6 +122,14 @@ void easySprites()
 	setSpriteData(12,Vilan25Data);
 	setSpriteData(13,Vilan26Data);
 	
+	setSpriteData(14,villan30Data);
+	setSpriteData(15,villan31Data);
+	setSpriteData(16,villan32Data);
+	setSpriteData(17,villan33Data);
+	setSpriteData(18,villan34Data);
+	setSpriteData(19,villan35Data);
+	setSpriteData(20,villan36Data);
+	
 	setSpriteData(62,heartData);
 	setSpriteData(63,starData);
 	
@@ -161,6 +176,21 @@ void easySprites()
 	mysprites[7].y = 80;
 	mysprites[7].health = 1;
 	changeAnimation(7,7);
+	
+	mysprites[8].x = 64;
+	mysprites[8].y = 24;
+	mysprites[8].health = 1;
+	changeAnimation(14,8);
+	
+	mysprites[9].x = 38;
+	mysprites[9].y = 47;
+	mysprites[9].health = 1;
+	changeAnimation(14,9);
+	
+	mysprites[10].x = 91;
+	mysprites[10].y = 86;
+	mysprites[10].health = 1;
+	changeAnimation(14,10);
 	
 	
 	changeAnimation(63,90);
@@ -496,7 +526,7 @@ int attack(int ani,int num)
 {
     if (immune > 0)
 	{
-		changeAnimation(7,num);
+		changeAnimation((ani*7),num);
         return 0;
 	}
     immune = 60;
@@ -504,9 +534,9 @@ int attack(int ani,int num)
     else
     {
         if(mysprites[num].animation < 3)
-            changeAnimation(10,num);
+            changeAnimation((ani*7) + 3,num);
         else
-            changeAnimation(10,num);
+            changeAnimation((ani*7) + 6,num);
     }
     
     addHeart(--mysprites[0].health);
@@ -654,7 +684,7 @@ int AI_Patrol(int x1, int y1, int x2, int y2, int character, int num)
 
         if(abs(mysprites[num].x - mysprites[0].x) < 10 && abs(mysprites[num].y - mysprites[0].y) < 10 && mysprites[num].animation != 3 && mysprites[num].animation != 6)
         {
-            attack(0,num);
+            attack(character,num);
       		moveSprite(mysprites[num].x, mysprites[num].y, num);
         }
         else;
@@ -711,7 +741,7 @@ int AI_follow(int character, int num)
 
             if(abs(mysprites[num].x - mysprites[0].x) < 10 && abs(mysprites[num].y - mysprites[0].y) < 10 && mysprites[num].animation != 3 && mysprites[num].animation != 6)
             {
-                attack(0,num);
+                attack(character,num);
         		moveSprite(mysprites[num].x, mysprites[num].y, num);
             }
             else;
@@ -754,35 +784,5 @@ int AI_followWall(int num)
                 mysprites[num].x--;
         else
             if(isWall(mysprites[num].x + 1,mysprites[num].y))
-                mysprites[num].x++;
-
-        if (mysprites[num].y - mysprites[0].y > 0)
-            if(isWall(mysprites[num].x,mysprites[num].y - 1))
-                mysprites[num].y--;
-        else
-            if(isWall(mysprites[num].x,mysprites[num].y + 1))
-                mysprites[num].y++;
-
-        if(abs(mysprites[num].x - mysprites[0].x) < 10 && abs(mysprites[num].y - mysprites[0].y) < 10 && mysprites[num].animation != 3 && mysprites[num].animation != 6)
-        {
-            attack(0,2);
-    		moveSprite(mysprites[num].x, mysprites[num].y, num);
-        }
-        else
-            changeAnimation(0,2);
-        MoveSprite(num);
-    }
-
-    return 0;
-}
+           
 */
-
-
-
-
-
-
-
-
-
-
