@@ -29,6 +29,8 @@
 
 
 
+int ltest = 0;
+int bItem = 0;
 int checka = 0;
 int animationHolder = 0;
 int attackStarCheck = 0;
@@ -285,10 +287,25 @@ void runSprite()
 		
 		if(Pressed(BUTTON_B))
 		{
-			attackStarCheck = 1;
-			freeze = 200;
+			if(bItem%2 == 0)
+			{
+				attackStarCheck = 1;
+			}
+			else
+			{
+				freeze = 200;
+			}
 		}
-		
+		if(Pressed(BUTTON_L) && ltest == 1)
+		{
+			bItem--;
+			ltest = 0;
+		}
+		if(Pressed(BUTTON_R) && ltest == 0)
+		{
+			bItem++;
+			ltest = 1;
+		}
 		
     
 		if(Pressed(BUTTON_LEFT))
