@@ -25,13 +25,16 @@
 #include "star.h"
 #include "heart.h"
 #include "hilight.h"
+#include "ghost.h"
+#include "defines.h"
 
 
 
 
 
-
-
+int freezenumber = 0;
+int starnumber = 0;
+int attacklimit = 0;
 int ltest = 0;
 int bItem = 0;
 int checka = 0;
@@ -107,7 +110,57 @@ typedef struct sprite
 
 }spriteHandle;
 
+
+typedef struct Enemy{
+    int numEnemies;
+    int enemyType;
+    int enemyX;
+    int enemyY;
+} Enemies, *proomSprites;
+
+Enemies roomSprites[50];
+
+typedef struct rd {
+    unsigned short* mapData;
+    unsigned short* hitmapData;
+    Enemies* spriteData;
+    int numEnemies;
+    struct rd* roomLeft;
+    struct rd* roomUp;
+    struct rd* roomRight;
+    struct rd* roomDown;
+} roomData;
+
+roomData currentroom;
+
+
 spriteHandle mysprites[128];
+
+
+int loadEnemy(Enemies * room, int size)
+{
+	int count = 0;
+	int spritenum = 0;
+	for(count = 0; count < size; count++)
+	{
+		spritenum++;
+		changeAnimation(room[count].enemyType,spritenum);
+		moveSprite(room[count].enemyX, room[count].enemyY, spritenum);
+		MoveSprite(spritenum);
+	}
+	return 0;
+}
+int runEnemy(Enemies * room, int size)
+{
+	int count = 0;
+	int spritenum = 0;
+	for(count = 0; count < size; count++)
+	{
+		spritenum++;
+		AI_follow(room[count].enemyType,spritenum++);
+	}
+	return 0;
+}
 
 void easySprites()
 {
@@ -137,6 +190,14 @@ void easySprites()
 	setSpriteData(19,villan35Data);
 	setSpriteData(20,villan36Data);
 	
+	setSpriteData(21,ghostData);
+	setSpriteData(22,ghostData);
+	setSpriteData(23,ghostData);
+	setSpriteData(24,ghostData);
+	setSpriteData(25,ghostData);
+	setSpriteData(26,ghostData);
+	setSpriteData(27,ghostData);
+	
 	setSpriteData(60,freezeData);
 	setSpriteData(61,hilightData);
 	setSpriteData(62,heartData);
@@ -150,12 +211,16 @@ void easySprites()
 		sprites[count].attribute2 = (((3)&3)<<10);
 		
 	}
+	
 	mysprites[0].x = 40;
 	mysprites[0].y = 40;
 	mysprites[0].health = 10;
+	
+	
 	mysprites[1].x = 0;
 	mysprites[1].y = 20;
 	changeAnimation(7,1);
+	
 	mysprites[2].x = 150;
 	mysprites[2].y = 0;
 	mysprites[2].health = 1;
@@ -200,12 +265,13 @@ void easySprites()
 	mysprites[10].y = 86;
 	mysprites[10].health = 1;
 	changeAnimation(14,10);
+	mysprites[3].x = 10;
+	mysprites[3].y = 10;
+	
 	
 	
 	changeAnimation(63,90);
 	changeAnimation(62,91);
-	mysprites[3].x = 10;
-	mysprites[3].y = 10;
 	UpdateSpriteMemory();
 	
 }
@@ -266,6 +332,8 @@ void UpdateSpriteMemory()
 
 void runSprite()
 {
+	if(attacklimit < 100)
+		attacklimit++;
     CheckButtons();
 	if(mysprites[0].alive > 0)
 	{
@@ -277,14 +345,16 @@ void runSprite()
                moveSprite(mysprites[0].x + 1, mysprites[0].y - 1, 0);
         }
 	
-		if(Pressed(BUTTON_A))
+		if(Pressed(BUTTON_A) && (attacklimit > 50))
 		{
+			attacklimit = 0;
 			if (checka < 1)
 				animationHolder = mysprites[0].animation;
 			checka = 1;
 			attack2(0);
+			
 		}
-		else if( checka > 0)
+		else if( (attacklimit > 50) && checka > 0)
 		{
 			checka = 0;
 			changeAnimation(animationHolder,0);
@@ -294,10 +364,17 @@ void runSprite()
 		{
 			if(bItem%2 == 0)
 			{
-				attackStarCheck = 1;
+				if(starnumber < 3)
+				{
+					if(attackStarCheck == 0)
+						starnumber++;
+					attackStarCheck = 1;
+				}
 			}
-			else
+			else if(freezenumber < 3)
 			{
+				if(freeze == 0)
+					freezenumber++;
 				freeze = 200;
 			}
 		}
@@ -408,8 +485,14 @@ int moveSprite(int x, int y, int num)
 {
     int xtile = x / 8;
     int ytile = y / 8;
-    if (x < 0 || y < 0 || x < 240 && (bg04map[ytile*32+xtile] < 9 || bg04map[(ytile+1)*32+xtile] < 9 ||  bg04map[(ytile+2)*32+xtile] < 9 || bg04map[ytile*32+(xtile+1)] < 9 || bg04map[(ytile+1)*32+(xtile+1)] < 9 || bg04map[(ytile+2)*32+(xtile+1)] < 9))
+    if (x < 0 || y < 0 || x < 240 && (bg04map[ytile*32+xtile] == 5 || bg04map[(ytile+1)*32+xtile] == 5 ||  bg04map[(ytile+2)*32+xtile] == 5 || bg04map[ytile*32+(xtile+1)] == 5 || bg04map[(ytile+1)*32+(xtile+1)] == 5 || bg04map[(ytile+2)*32+(xtile+1)] == 5 || bg04map[ytile*32+(xtile+2)] == 5 || bg04map[(ytile+1)*32+(xtile+2)] == 5 || bg04map[(ytile+2)*32+(xtile+2)] == 5))
         return 0;
+        
+    if (num == 0) {
+        if (xtile == 0) {
+            loadRoomLeft(currentmap, currenthitmap);
+        }
+    }
     
 	mysprites[num].x = x;
 	mysprites[num].y = y;
@@ -450,11 +533,15 @@ int attack2(int num)
     for (attack2count = 1; attack2count < 90; attack2count++)
     {
         if(abs(mysprites[attack2count].x - mysprites[0].x) < 18 && abs(mysprites[attack2count].y - mysprites[0].y) < 18)
-            mysprites[attack2count].health--;
-        if(mysprites[attack2count].health < 0)
-            mysprites[attack2count].alive = -1;
+        {
+			mysprites[attack2count].health--;
+			if(mysprites[attack2count].health <= 0)
+				mysprites[attack2count].alive = -1;
+			attack2count = 1000;
+		}
     }
     wack();
+	UpdateSpriteMemory();
     return 0;
 }
 int attackStar(int num)

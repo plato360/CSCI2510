@@ -1,3 +1,5 @@
+#ifndef DEFINES_H
+#define DEFINES_H
 #define BG0_ENABLE 0x100
 #define BG1_ENABLE 0x200
 #define BG2_ENABLE 0x400
@@ -234,7 +236,6 @@ unsigned short* bgm1map =(unsigned short*)ScreenBaseBlock(10);
  unsigned short* bg01map =(unsigned short*)ScreenBaseBlock(2);
  unsigned short* bg02map =(unsigned short*)ScreenBaseBlock(10);
  unsigned short* bg04map =(unsigned short*)ScreenBaseBlock(26);
- 
 
  void DMAFastCopy(void* source, void* dest, unsigned int count, unsigned int mode);
  
@@ -245,4 +246,9 @@ int cprev = 31;
 int cvofs = 0;
 int cvnext = 20;
 int cvprev = 31;
+
+ unsigned short* currentmap;
+ unsigned short* currenthitmap;
+ 
+#endif
  ////////////////////////////////////////////////////////////////////////

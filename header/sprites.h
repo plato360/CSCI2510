@@ -26,7 +26,7 @@
 #include "heart.h"
 #include "hilight.h"
 #include "ghost.h"
-
+#include "defines.h"
 
 
 
@@ -119,6 +119,19 @@ typedef struct Enemy{
 } Enemies, *proomSprites;
 
 Enemies roomSprites[50];
+
+typedef struct rd {
+    unsigned short* mapData;
+    unsigned short* hitmapData;
+    Enemies* spriteData;
+    int numEnemies;
+    struct rd* roomLeft;
+    struct rd* roomUp;
+    struct rd* roomRight;
+    struct rd* roomDown;
+} roomData;
+
+roomData currentroom;
 
 
 spriteHandle mysprites[128];
@@ -474,6 +487,12 @@ int moveSprite(int x, int y, int num)
     int ytile = y / 8;
     if (x < 0 || y < 0 || x < 240 && (bg04map[ytile*32+xtile] == 5 || bg04map[(ytile+1)*32+xtile] == 5 ||  bg04map[(ytile+2)*32+xtile] == 5 || bg04map[ytile*32+(xtile+1)] == 5 || bg04map[(ytile+1)*32+(xtile+1)] == 5 || bg04map[(ytile+2)*32+(xtile+1)] == 5 || bg04map[ytile*32+(xtile+2)] == 5 || bg04map[(ytile+1)*32+(xtile+2)] == 5 || bg04map[(ytile+2)*32+(xtile+2)] == 5))
         return 0;
+        
+    if (num == 0) {
+        if (xtile == 0) {
+            loadRoomLeft(currentroom->roomLeft.mapData, currentroom->roomLeft.hitmapData);
+        }
+    }
     
 	mysprites[num].x = x;
 	mysprites[num].y = y;

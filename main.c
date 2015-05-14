@@ -31,6 +31,7 @@ void Initialize() //Initializes variables
 
 void LoadContent() //Loads the initial content
 {
+    loadRoomData();
     if (gameState == STATE_TITLE)
         LoadInitialTitleScreen();
 	loadHud();
