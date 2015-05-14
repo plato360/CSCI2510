@@ -27,3 +27,15 @@ header\Backgrounds\Room1hitmap.raw.c
 header\Backgrounds\Room1hitmap.map.c
 header\Backgrounds\Room1.map.c
 header\Backgrounds\Room1.raw.c
+header\Backgrounds\Room2.map.c
+header\Backgrounds\Room4.map.c
+header\Backgrounds\Room3.map.c
+header\Backgrounds\master.pal.c
+header\Backgrounds\HUD.map.c
+header\Backgrounds\HUD.raw.c
+header\Backgrounds\master.pal.c
+header\Backgrounds\Room1.map.c
+header\Backgrounds\Room1.raw.c
+header\Backgrounds\Room2.map.c
+header\Backgrounds\Room3.map.c
+header\Backgrounds\Room4.map.c
