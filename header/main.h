@@ -19,8 +19,10 @@
 #include "Backgrounds\blank\blank.map.c"
 #include "Backgrounds\blank\blank.raw.c"
 
-
 #include "Backgrounds/Room1.map.c"
+#include "Backgrounds/Room2.map.c"
+#include "Backgrounds/Room3.map.c"
+#include "Backgrounds/Room4.map.c"
 #include "Backgrounds/Room1.raw.c"
 #include "Backgrounds/Room1hitmap.map.c"
 #include "Backgrounds/Room1hitmap.raw.c"
@@ -202,10 +204,44 @@ void loadRoomData() {
     room1->mapData = Room1_Map;
     room1->hitmapData = Room1hitmap_Map;
     room1->numEnemies = 5;
-    room1->roomLeft = room1;
-    room1->roomRight= room1;
+
+    roomData* room2 = (roomData*) malloc(sizeof(roomData));
+    room2->spriteData = roomSprites;
+    room2->mapData = Room2_Map;
+    room2->hitmapData = Room2hitmap_Map;
+    room2->numEnemies = 5;
+
+    roomData* room3 = (roomData*) malloc(sizeof(roomData));
+    room3->spriteData = roomSprites;
+    room3->mapData = Room3_Map;
+    room3->hitmapData = Room3hitmap_Map;
+    room3->numEnemies = 5;
+
+    roomData* room4 = (roomData*) malloc(sizeof(roomData));
+    room4->spriteData = roomSprites;
+    room4->mapData = Room4_Map;
+    room4->hitmapData = Room4hitmap_Map;
+    room4->numEnemies = 5;
+
+    room1->roomLeft = room4;
+    room1->roomRight= room2;
     room1->roomUp = room1;
     room1->roomDown = room1;
+
+    room2->roomLeft = room1;
+    room2->roomRight= room2;
+    room2->roomUp = room3;
+    room2->roomDown = room2;
+
+    room3->roomLeft = room3;
+    room3->roomRight= room3;
+    room3->roomUp = room3;
+    room3->roomDown = room2;
+
+    room4->roomLeft = room4;
+    room4->roomRight= room1;
+    room4->roomUp = room4;
+    room4->roomDown = room4;
     currentroom = room1;
 }
 
@@ -290,6 +326,7 @@ int loadRoomRight(const unsigned short* roomLoaded, const unsigned short* hitmap
             cy = 0;
         for (loopy = 0; loopy < 20; loopy++) {
             bg02map[cnext + cy*32] = roomLoaded[loop+loopy*30];
+            bg04map[loop + loopy*32] = hitmapLoaded[loop+loopy*30];
             cy++;
             if (cy > 31)
                 cy = 0;
@@ -309,7 +346,7 @@ int loadRoomRight(const unsigned short* roomLoaded, const unsigned short* hitmap
         REG_BG1HOFS = chofs;
         cnext++;
         cprev++;
-		mysprites[0].x-=7;
+        mysprites[0].x-=7;
 		MoveSprite(0);
 		UpdateSpriteMemory();
         if (cnext == 32) {
@@ -330,18 +367,16 @@ int loadRoomLeft(const unsigned short* roomLoaded, const unsigned short* hitmapL
 
     int loop, loopy;
     int cy;
-    for (loop = 29; loop >= 0; loop--) 
-	{
+    for (loop = 29; loop >= 0; loop--) {
         cy = cvprev + 1;
         if (cy > 31)
             cy = 0;
-        for (loopy = 0; loopy < 20; loopy++) 
-		{
+        for (loopy = 0; loopy < 20; loopy++) {
             bg02map[cprev + cy*32] = roomLoaded[loop+loopy*30];
+            bg04map[loop + loopy*32] = hitmapLoaded[loop+loopy*30];
             cy++;
             if (cy > 31)
                 cy = 0;
-			
         }
         chofs -= 2;
         WaitVBlank();
@@ -357,7 +392,7 @@ int loadRoomLeft(const unsigned short* roomLoaded, const unsigned short* hitmapL
         REG_BG1HOFS = chofs;
         cnext--;
         cprev--;
-		mysprites[0].x+=7;
+        mysprites[0].x+=7;
 		MoveSprite(0);
 		UpdateSpriteMemory();
         if (cnext < 0) {
@@ -379,6 +414,7 @@ int loadRoomUp(const unsigned short* roomLoaded, const unsigned short* hitmapLoa
             cx = 0;
         for (loopx = 0; loopx < 30; loopx++) {
             bg02map[cvprev*32 + cx] = roomLoaded[loopx+loop*30];
+            bg04map[loopx + loop*32] = hitmapLoaded[loopx+loop*30];
             cx++;
             if (cx > 31)
                 cx = 0;
@@ -408,7 +444,7 @@ int loadRoomUp(const unsigned short* roomLoaded, const unsigned short* hitmapLoa
 	return 0;
 }
 
-int loadRoomDown(const unsigned short* roomLoaded) {
+int loadRoomDown(const unsigned short* roomLoaded, const unsigned short* hitmapLoaded) {
 
     int loop, loopx, cx;
     for (loop = 0; loop < 20; loop++) {
@@ -417,6 +453,7 @@ int loadRoomDown(const unsigned short* roomLoaded) {
             cx = 0;
         for (loopx = 0; loopx < 30; loopx++) {
             bg02map[cvnext*32 + cx] = roomLoaded[loopx+loop*30];
+            bg04map[loopx + loop*32] = hitmapLoaded[loopx+loop*30];
             cx++;
             if (cx > 31)
                 cx = 0;
@@ -1017,22 +1054,22 @@ int moveSprite(int x, int y, int num)
         else if (xtile > 27) {
             //mysprites[num].x = 16;
             mysprites[num].y = y;
-            currentroom = currentroom->roomLeft;
+            currentroom = currentroom->roomRight;
             loadRoomRight(currentroom->mapData,currentroom->hitmapData);
             return 0;
         }
         else if (ytile == 0) {
             mysprites[num].x = x;
             mysprites[num].y = 128;
-            currentroom = currentroom->roomLeft;
-            loadRoomLeft(currentroom->mapData,currentroom->hitmapData);
+            currentroom = currentroom->roomUp;
+            loadRoomUp(currentroom->mapData,currentroom->hitmapData);
             return 0;
         }
         else if (ytile > 17) {
             mysprites[num].x = x;
             mysprites[num].y = 16;
-            currentroom = currentroom->roomLeft;
-            loadRoomRight(currentroom->mapData,currentroom->hitmapData);
+            currentroom = currentroom->roomDown;
+            loadRoomDown(currentroom->mapData,currentroom->hitmapData);
             return 0;
         }
     }
