@@ -93,29 +93,11 @@ void loadRoom1()
 	int countx = 0;
 	int county = 0;
 	
-    REG_BG1CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(10 << SCREEN_SHIFT) | 4 | 0x1;
+    //REG_BG1CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(10 << SCREEN_SHIFT) | 4 | 0x1;
 	DMAFastCopy((void*)master_Palette, (void*)BGPaletteMem,256, DMA_16NOW);
-	for(county = 0; county <32; county++)
-	{
-		for(countx = 0; countx < 32; countx++)
-		{
-			MapData2[countx + county*32] = 0;
-		}
-	}
-
-    for(county = 0; county <20; county++)
-	{
-		for(countx = 0; countx < 30; countx++)
-		{
-			MapData2[countx + county*32] = Room1_Map[countx+county*30];
-		}
-	}
-	
 	DMAFastCopy((void*)Room1_Tiles, (void*)CharBaseBlock(1),704/4, DMA_32NOW);
-    DMAFastCopy((void*)MapData2, (void*)bg02map, 512, DMA_32NOW);
     
-    REG_BG3CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(26 << SCREEN_SHIFT) | 12 | 0x3;
-	DMAFastCopy((void*)master_Palette, (void*)BGPaletteMem,256, DMA_16NOW);
+    //REG_BG3CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(26 << SCREEN_SHIFT) | 12 | 0x3;
 	for(county = 0; county <32; county++)
 	{
 		for(countx = 0; countx < 32; countx++)
@@ -134,14 +116,47 @@ void loadRoom1()
 	
 	DMAFastCopy((void*)Room1hitmap_Tiles, (void*)CharBaseBlock(3),640/4, DMA_32NOW);
     DMAFastCopy((void*)MapData4, (void*)bg04map, 512, DMA_32NOW);
-    
+    loadRoom(Room1_Map);
+
 //    loadRoomLeft(Room1hitmap_Map);
 //    loadRoomLeft(Room1hitmap_Map);
 //    loadRoomRight(Room1hitmap_Map);
 //    loadRoomDown(Room1hitmap_Map);
-//   loadRoomDown(Room1hitmap_Map);
+//    loadRoomDown(Room1hitmap_Map);
 //    loadRoomUp(Room1hitmap_Map);
 //    loadRoomRight(Room1hitmap_Map);
+}
+int loadRoom(const unsigned short* roomLoaded) {
+
+    int loop, loopy;
+    int cy;
+    WaitVBlank();
+    for (loop = 0; loop < 30; loop++) {
+        cy = cvprev + 1;
+        if (cy > 31)
+            cy = 0;
+        for (loopy = 0; loopy < 20; loopy++) {
+            bg02map[cnext + cy*32] = roomLoaded[loop+loopy*30];
+            cy++;
+            if (cy > 31)
+                cy = 0;
+        }
+        chofs += 8;
+        REG_BG1HOFS = chofs;
+        cnext++;
+        cprev++;
+        if (cnext == 32) {
+            cnext = 0;
+        }
+        if (cprev == 32) {
+            cprev = 0;
+        }
+        if (chofs >= 256) {
+            chofs = 0;
+            REG_BG1HOFS = 0;
+        }
+    }
+	return 0;
 }
 
 int loadRoomRight(const unsigned short* roomLoaded) {
@@ -381,9 +396,9 @@ int initializeBackgrounds()
 	//set video mode 0 with background 0
 	SetMode(0 | BG0_ENABLE | BG1_ENABLE | BG2_ENABLE  | BG3_ENABLE | OBJ_ENABLE | OBJ_MAP_1D);
 	REG_BG0CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(2 << SCREEN_SHIFT) | 0x0;
-	REG_BG1CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(2 << SCREEN_SHIFT) | 0x1;
+	REG_BG1CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(10 << SCREEN_SHIFT) | 4 | 0x1;
 	REG_BG2CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(2 << SCREEN_SHIFT) | 0x2;
-	REG_BG3CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(2 << SCREEN_SHIFT) | 0x3;
+	REG_BG3CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(26 << SCREEN_SHIFT) | 12 | 0x3;
 	
 	for(county = 0; county <32; county++)
 	{
