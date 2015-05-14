@@ -35,6 +35,9 @@
 #include "Backgrounds/menu2/menu2.map.c"
 #include "Backgrounds/menu2/menu2.raw.c"
 
+ unsigned short* currentmap= Room1_Map;
+ unsigned short* currenthitmap = Room1hitmap_Map;
+
 void loadHud();
 void loadMenu();
 int startCheck();
@@ -87,61 +90,38 @@ void loadHud()
     
     addHeart(10);
 }
+int loadRoom(const unsigned short* roomLoaded, const unsigned short* hitmapLoaded) {
 
-void loadRoom1()
-{
-	int countx = 0;
-	int county = 0;
-	
-    REG_BG1CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(10 << SCREEN_SHIFT) | 4 | 0x1;
-	DMAFastCopy((void*)master_Palette, (void*)BGPaletteMem,256, DMA_16NOW);
-	for(county = 0; county <32; county++)
-	{
-		for(countx = 0; countx < 32; countx++)
-		{
-			MapData2[countx + county*32] = 0;
-		}
-	}
-
-    for(county = 0; county <20; county++)
-	{
-		for(countx = 0; countx < 30; countx++)
-		{
-			MapData2[countx + county*32] = Room1_Map[countx+county*30];
-		}
-	}
-	
-	DMAFastCopy((void*)Room1_Tiles, (void*)CharBaseBlock(1),704/4, DMA_32NOW);
-    DMAFastCopy((void*)MapData2, (void*)bg02map, 512, DMA_32NOW);
-    
-    REG_BG3CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(26 << SCREEN_SHIFT) | 12 | 0x3;
-	DMAFastCopy((void*)master_Palette, (void*)BGPaletteMem,256, DMA_16NOW);
-	for(county = 0; county <32; county++)
-	{
-		for(countx = 0; countx < 32; countx++)
-		{
-			MapData4[countx + county*32] = 0;
-		}
-	}
-
-    for(county = 0; county <20; county++)
-	{
-		for(countx = 0; countx < 30; countx++)
-		{
-			MapData4[countx + county*32] = Room1hitmap_Map[countx+county*30];
-		}
-	}
-	
-	DMAFastCopy((void*)Room1hitmap_Tiles, (void*)CharBaseBlock(3),640/4, DMA_32NOW);
-    DMAFastCopy((void*)MapData4, (void*)bg04map, 512, DMA_32NOW);
-    
-//    loadRoomLeft(Room1hitmap_Map);
-//    loadRoomLeft(Room1hitmap_Map);
-//    loadRoomRight(Room1hitmap_Map);
-//    loadRoomDown(Room1hitmap_Map);
-//   loadRoomDown(Room1hitmap_Map);
-//    loadRoomUp(Room1hitmap_Map);
-//    loadRoomRight(Room1hitmap_Map);
+    int loop, loopy;
+    int cy;
+    WaitVBlank();
+    for (loop = 0; loop < 30; loop++) {
+        cy = cvprev + 1;
+        if (cy > 31)
+            cy = 0;
+        for (loopy = 0; loopy < 20; loopy++) {
+            bg02map[cnext + cy*32] = roomLoaded[loop+loopy*30];
+            bg04map[loop + loopy*32] = hitmapLoaded[loop+loopy*30];
+            cy++;
+            if (cy > 31)
+                cy = 0;
+        }
+        chofs += 8;
+        REG_BG1HOFS = chofs;
+        cnext++;
+        cprev++;
+        if (cnext == 32) {
+            cnext = 0;
+        }
+        if (cprev == 32) {
+            cprev = 0;
+        }
+        if (chofs >= 256) {
+            chofs = 0;
+            REG_BG1HOFS = 0;
+        }
+    }
+	return 0;
 }
 
 int loadRoomRight(const unsigned short* roomLoaded) {
@@ -316,6 +296,9 @@ int startCheck()
 		}
 		else
 		{
+		    DMAFastCopy((void*)master_Palette, (void*)BGPaletteMem,256, DMA_16NOW);
+	        DMAFastCopy((void*)Room1_Tiles, (void*)CharBaseBlock(1),704/4, DMA_32NOW);
+            DMAFastCopy((void*)Room1hitmap_Tiles, (void*)CharBaseBlock(3),640/4, DMA_32NOW);
 			gameState = STATE_INGAME;
 			mysprites[86].x = 240;
 			mysprites[86].y = 160;
@@ -331,7 +314,7 @@ int startCheck()
 			MoveSprite(89);
 			UpdateSpriteMemory();
 			loadHud();
-			loadRoom1();
+			loadRoom(currentmap, currenthitmap);
 			addHeart(mysprites[0].health);
 		}
 		activebutton(BUTTON_START);
@@ -377,13 +360,12 @@ int initializeBackgrounds()
 	int countx = 0;
 	int county = 0;
 	
-	
 	//set video mode 0 with background 0
 	SetMode(0 | BG0_ENABLE | BG1_ENABLE | BG2_ENABLE  | BG3_ENABLE | OBJ_ENABLE | OBJ_MAP_1D);
 	REG_BG0CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(2 << SCREEN_SHIFT) | 0x0;
-	REG_BG1CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(2 << SCREEN_SHIFT) | 0x1;
+	REG_BG1CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(10 << SCREEN_SHIFT) | 4 | 0x1;
 	REG_BG2CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(2 << SCREEN_SHIFT) | 0x2;
-	REG_BG3CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(2 << SCREEN_SHIFT) | 0x3;
+	REG_BG3CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(26 << SCREEN_SHIFT) | 12 | 0x3;
 	
 	for(county = 0; county <32; county++)
 	{

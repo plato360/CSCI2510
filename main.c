@@ -34,7 +34,7 @@ void LoadContent() //Loads the initial content
     if (gameState == STATE_TITLE)
         LoadInitialTitleScreen();
 	loadHud();
-	loadRoom1();
+	loadRoom(currentmap, currenthitmap);
 	
     
 }

@@ -233,7 +233,9 @@ unsigned short* bgm1map =(unsigned short*)ScreenBaseBlock(10);
 
  unsigned short* bg01map =(unsigned short*)ScreenBaseBlock(2);
  unsigned short* bg02map =(unsigned short*)ScreenBaseBlock(10);
-  unsigned short* bg04map =(unsigned short*)ScreenBaseBlock(26);
+ unsigned short* bg04map =(unsigned short*)ScreenBaseBlock(26);
+ 
+
  void DMAFastCopy(void* source, void* dest, unsigned int count, unsigned int mode);
  
  int immune = 0;
