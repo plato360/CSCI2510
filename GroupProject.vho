@@ -39,3 +39,7 @@ header\Backgrounds\Room1.raw.c
 header\Backgrounds\Room2.map.c
 header\Backgrounds\Room3.map.c
 header\Backgrounds\Room4.map.c
+header\Backgrounds\Room5.map.c
+header\Backgrounds\Room6.map.c
+header\Backgrounds\Room7.map.c
+header\Backgrounds\Room8.map.c
