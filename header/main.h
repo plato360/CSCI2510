@@ -308,6 +308,10 @@ int startCheck()
 		if (gameState == STATE_INGAME)
 		{
 			gameState = STATE_TITLE;
+			mysprites[89].x = 1;
+			mysprites[89].y = 16*3;
+			sprites[89].attribute2 = ((61*16)&0x3FF) | (((0)&3)<<10);
+			MoveSprite(89);
 			initializeBackgrounds();
 		}
 		else
@@ -442,15 +446,56 @@ void loadMenu()
 	
     DMAFastCopy((void*)MapData1, (void*)bgm0map, 512, DMA_32NOW);
 	
+	mysprites[87].x = 1;
+	mysprites[87].y = 16*3;
 	mysprites[88].x = 1;
-	mysprites[88].y = 16*3;
-	mysprites[89].x = 1;
-	mysprites[89].y = 16*7;
-	sprites[88].attribute2 = ((63*16)&0x3FF) | (((0)&3)<<10);
-	sprites[89].attribute2 = ((62*16)&0x3FF) | (((0)&3)<<10);
+	mysprites[88].y = 16*7;
+	
+	sprites[87].attribute2 = ((63*16)&0x3FF) | (((0)&3)<<10);
+	sprites[88].attribute2 = ((62*16)&0x3FF) | (((0)&3)<<10);
+	
+
+	MoveSprite(87);
 	MoveSprite(88);
-	MoveSprite(89);
+
+	CheckButtons();
+	if(Pressed(BUTTON_UP))
+	{
+		if(mysprites[89].y == 16*7)
+		{
+			mysprites[89].y = 16*3;
+			mysprites[89].x = 1;
+		}
+		MoveSprite(89);
+	}
+	if(Pressed(BUTTON_DOWN))
+	{
+		if(mysprites[89].y == 16*3)
+		{
+			mysprites[89].y = 16*7;
+			mysprites[89].x = 1;
+		}
+		MoveSprite(89);
+	}
+	if(Pressed(BUTTON_LEFT))
+	{
+		if(mysprites[89].x == 16)
+		{
+			mysprites[89].x = 1;
+		}
+		MoveSprite(89);
+	}
+	if(Pressed(BUTTON_RIGHT))
+	{
+		if(mysprites[89].x == 1 &&  mysprites[89].y == 16*3)
+		{
+			mysprites[89].x = 16;
+		}
+		MoveSprite(89);
+	}
+
 	UpdateSpriteMemory();
+	
 
 }
 

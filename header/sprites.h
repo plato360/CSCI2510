@@ -23,6 +23,8 @@
 
 #include "star.h"
 #include "heart.h"
+#include "hilight.h"
+
 
 
 
@@ -134,6 +136,7 @@ void easySprites()
 	setSpriteData(19,villan35Data);
 	setSpriteData(20,villan36Data);
 	
+	setSpriteData(61,hilightData);
 	setSpriteData(62,heartData);
 	setSpriteData(63,starData);
 	
