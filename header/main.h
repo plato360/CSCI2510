@@ -317,10 +317,16 @@ int startCheck()
 		else
 		{
 			gameState = STATE_INGAME;
+			mysprites[86].x = 240;
+			mysprites[86].y = 160;
+			mysprites[87].x = 240;
+			mysprites[87].y = 160;
 			mysprites[88].x = 240;
 			mysprites[88].y = 160;
 			mysprites[89].x = 240;
 			mysprites[89].y = 160;
+			MoveSprite(86);
+			MoveSprite(87);
 			MoveSprite(88);
 			MoveSprite(89);
 			UpdateSpriteMemory();
@@ -446,15 +452,19 @@ void loadMenu()
 	
     DMAFastCopy((void*)MapData1, (void*)bgm0map, 512, DMA_32NOW);
 	
+	mysprites[86].x = 17;
+	mysprites[86].y = 16*3;
 	mysprites[87].x = 1;
 	mysprites[87].y = 16*3;
 	mysprites[88].x = 1;
 	mysprites[88].y = 16*7;
 	
+	sprites[86].attribute2 = ((60*16)&0x3FF) | (((0)&3)<<10);
 	sprites[87].attribute2 = ((63*16)&0x3FF) | (((0)&3)<<10);
 	sprites[88].attribute2 = ((62*16)&0x3FF) | (((0)&3)<<10);
 	
 
+	MoveSprite(86);
 	MoveSprite(87);
 	MoveSprite(88);
 
@@ -479,7 +489,7 @@ void loadMenu()
 	}
 	if(Pressed(BUTTON_LEFT))
 	{
-		if(mysprites[89].x == 16)
+		if(mysprites[89].x == 17)
 		{
 			mysprites[89].x = 1;
 		}
@@ -489,9 +499,28 @@ void loadMenu()
 	{
 		if(mysprites[89].x == 1 &&  mysprites[89].y == 16*3)
 		{
-			mysprites[89].x = 16;
+			mysprites[89].x = 17;
 		}
 		MoveSprite(89);
+	}
+	if(Pressed(BUTTON_A))
+	{
+		if(mysprites[89].y == 16*3)
+		{
+			if(mysprites[89].x == 1)
+			{
+				bItem = 0;
+				ltest = 0;
+			}
+			else
+			{
+				bItem = 1;
+				ltest = 1;
+			}
+		}
+		else
+			if(mysprites[0].health < 10)
+				mysprites[0].health++;
 	}
 
 	UpdateSpriteMemory();
