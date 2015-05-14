@@ -303,6 +303,9 @@ int loadRoomRight(const unsigned short* roomLoaded, const unsigned short* hitmap
         REG_BG1HOFS = chofs;
         cnext++;
         cprev++;
+		mysprites[0].x-=7;
+		MoveSprite(0);
+		UpdateSpriteMemory();
         if (cnext == 32) {
             cnext = 0;
         }
@@ -321,15 +324,18 @@ int loadRoomLeft(const unsigned short* roomLoaded, const unsigned short* hitmapL
 
     int loop, loopy;
     int cy;
-    for (loop = 29; loop >= 0; loop--) {
+    for (loop = 29; loop >= 0; loop--) 
+	{
         cy = cvprev + 1;
         if (cy > 31)
             cy = 0;
-        for (loopy = 0; loopy < 20; loopy++) {
+        for (loopy = 0; loopy < 20; loopy++) 
+		{
             bg02map[cprev + cy*32] = roomLoaded[loop+loopy*30];
             cy++;
             if (cy > 31)
                 cy = 0;
+			
         }
         chofs -= 2;
         WaitVBlank();
@@ -345,6 +351,9 @@ int loadRoomLeft(const unsigned short* roomLoaded, const unsigned short* hitmapL
         REG_BG1HOFS = chofs;
         cnext--;
         cprev--;
+		mysprites[0].x+=7;
+		MoveSprite(0);
+		UpdateSpriteMemory();
         if (cnext < 0) {
             cnext = 31;
         }
@@ -986,14 +995,14 @@ int moveSprite(int x, int y, int num)
     if ((num == 0) && (proceed == 1))
 	{
         if (xtile == 0) {
-            mysprites[num].x = 208;
+            //mysprites[num].x = 208;
             mysprites[num].y = y;
             currentroom = currentroom->roomLeft;
             loadRoomLeft(currentroom->mapData,currentroom->hitmapData);
             return 0;
         }
         else if (xtile > 27) {
-            mysprites[num].x = 16;
+            //mysprites[num].x = 16;
             mysprites[num].y = y;
             currentroom = currentroom->roomLeft;
             loadRoomRight(currentroom->mapData,currentroom->hitmapData);
