@@ -34,6 +34,12 @@
 #include "Backgrounds/menu2/menu2.map.c"
 #include "Backgrounds/menu2/menu2.raw.c"
 
+#include "Backgrounds/victory/victory.pal.c"
+#include "Backgrounds/victory/victory1.map.c"
+#include "Backgrounds/victory/victory1.raw.c"
+#include "Backgrounds/victory/victory2.map.c"
+#include "Backgrounds/victory/victory2.raw.c"
+
 #include "solder.h"
 #include "solder2.h"
 #include "solder3.h"
@@ -701,18 +707,25 @@ int loadEnemy(Enemies * room, int size)
 }
 int runEnemy(Enemies * room, int size)
 {
+	proceed = 0;
 	int count = 0;
 	int countenemy = 0;
 	int spritenum = 0;
 	for(count = 0; count < size; count++)
 	{
 		spritenum++;
-		if(mysprites[spritenum].alive > 0)
-			countenemy++;
-		if(countenemy <= 0)
-			proceed = 1;
 		AI_follow(room[count].enemyType,spritenum);
 	}
+	spritenum = 0;
+	for(count = 0; count < size; count++)
+	{
+		spritenum++;
+		if(mysprites[spritenum].alive > 0)
+			countenemy++;
+	}
+	if(countenemy <= 0)
+		proceed = 1;
+	
 	return 0;
 }
 
@@ -1434,7 +1447,49 @@ int attackFreeze()
 	return 0;
 }
 
+void loadvictory()
+{
+	int countx = 0;
+	int county = 0;
+	
+	REG_BG0CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(2 << SCREEN_SHIFT) | 0x0;
+	REG_BG1CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(10 << SCREEN_SHIFT) | 0x4;
+	
+	DMAFastCopy((void*)victory_Palette, (void*)BGPaletteMem,256, DMA_16NOW);
+	DMAFastCopy((void*)victory1_Tiles, (void*)CharBaseBlock(0),768, DMA_32NOW);
+	DMAFastCopy((void*)victory2_Tiles, (void*)CharBaseBlock(1),128, DMA_32NOW);
+	
+	for(county = 0; county <32; county++)
+	{
+		for(countx = 0; countx < 32; countx++)
+		{
+			MapData1[countx + county*32] = 0;
+		}
+	}
 
+
+    for(county = 0; county <20; county++)
+	{
+		for(countx = 0; countx < 30; countx++)
+		{
+			MapData1[countx + county*32] = victory2_Map[countx+county*30];
+		}
+	}
+	
+    DMAFastCopy((void*)MapData1, (void*)bgm1map, 512, DMA_32NOW);
+	
+	for(county = 0; county <20; county++)
+	{
+		for(countx = 0; countx < 30; countx++)
+		{
+			MapData1[countx + county*32] = victory1_Map[countx+county*30];
+		}
+	}
+	
+    DMAFastCopy((void*)MapData1, (void*)bgm0map, 512, DMA_32NOW);
+	
+
+}
 
 
 /*
