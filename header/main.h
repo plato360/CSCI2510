@@ -314,6 +314,7 @@ int startCheck()
 			MoveSprite(89);
 			UpdateSpriteMemory();
 			loadHud();
+			REG_BG1CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(10 << SCREEN_SHIFT) | 4 | 0x1;
 			loadRoom(currentmap, currenthitmap);
 			addHeart(mysprites[0].health);
 		}
