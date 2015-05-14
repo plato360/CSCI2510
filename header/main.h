@@ -446,6 +446,8 @@ int startCheck()
 		}
 		else
 		{
+			REG_TM0CNT = 0;
+    	    REG_DMA1CNT_H = 0;
 		    DMAFastCopy((void*)master_Palette, (void*)BGPaletteMem,256, DMA_16NOW);
 	        DMAFastCopy((void*)Room1_Tiles, (void*)CharBaseBlock(1),704/4, DMA_32NOW);
             DMAFastCopy((void*)Room1hitmap_Tiles, (void*)CharBaseBlock(3),640/4, DMA_32NOW);
