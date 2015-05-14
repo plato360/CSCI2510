@@ -293,6 +293,7 @@ int startCheck()
 			sprites[89].attribute2 = ((61*16)&0x3FF) | (((0)&3)<<10);
 			MoveSprite(89);
 			initializeBackgrounds();
+			REG_BG1HOFS = 0;
 		}
 		else
 		{
