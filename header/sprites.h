@@ -408,7 +408,7 @@ int moveSprite(int x, int y, int num)
 {
     int xtile = x / 8;
     int ytile = y / 8;
-    if (x < 0 || y < 0 || x < 240 && (bg04map[ytile*32+xtile] < 9 || bg04map[(ytile+1)*32+xtile] < 9 ||  bg04map[(ytile+2)*32+xtile] < 9 || bg04map[ytile*32+(xtile+1)] < 9 || bg04map[(ytile+1)*32+(xtile+1)] < 9 || bg04map[(ytile+2)*32+(xtile+1)] < 9))
+    if (x < 0 || y < 0 || x < 240 && (bg04map[ytile*32+xtile] == 5 || bg04map[(ytile+1)*32+xtile] == 5 ||  bg04map[(ytile+2)*32+xtile] == 5 || bg04map[ytile*32+(xtile+1)] == 5 || bg04map[(ytile+1)*32+(xtile+1)] == 5 || bg04map[(ytile+2)*32+(xtile+1)] == 5 || bg04map[ytile*32+(xtile+2)] == 5 || bg04map[(ytile+1)*32+(xtile+2)] == 5 || bg04map[(ytile+2)*32+(xtile+2)] == 5))
         return 0;
     
 	mysprites[num].x = x;

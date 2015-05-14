@@ -21,3 +21,7 @@ header\Backgrounds\Room1hitmap.raw.c
 header\Backgrounds\title\title.map.c
 header\Backgrounds\title\title.pal.c
 header\Backgrounds\title\title.raw.c
+..\..\CS\CSCI2510\header\Backgrounds\Room1hitmap.map.c
+header\Backgrounds\Room1hitmap.map.c
+header\Backgrounds\Room1hitmap.raw.c
+header\Backgrounds\Room1hitmap.map.c
