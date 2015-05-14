@@ -70,9 +70,12 @@
 #include "heart.h"
 #include "hilight.h"
 #include "ghost.h"
+#include "key.h"
 
 //---------Sprites.h variables
 
+int activateheart = 0;
+int keyfound = 0;
 int proceed = 0;
 int freezenumber = 0;
 int starnumber = 0;
@@ -161,6 +164,10 @@ typedef struct Enemy{
 } Enemies, *proomSprites;
 
 Enemies roomSprites[50];
+Enemies room1[50];
+Enemies room2[50];
+Enemies * current;
+int currentnumber = 0;
 
 typedef struct rd {
     unsigned short* mapData;
@@ -360,6 +367,7 @@ int loadRoomRight(const unsigned short* roomLoaded, const unsigned short* hitmap
             REG_BG1HOFS = 0;
         }
     }
+	loadEnemy(room1,2);
 	return 0;
 }
 
@@ -392,6 +400,8 @@ int loadRoomLeft(const unsigned short* roomLoaded, const unsigned short* hitmapL
         REG_BG1HOFS = chofs;
         cnext--;
         cprev--;
+		if(keyfound == 0)
+			activateheart = 1;
         mysprites[0].x+=7;
 		MoveSprite(0);
 		UpdateSpriteMemory();
@@ -403,6 +413,8 @@ int loadRoomLeft(const unsigned short* roomLoaded, const unsigned short* hitmapL
         }
 
     }
+	if(keyfound == 0)
+		insertHeart(90,40);
 	return 0;
 }
 int loadRoomUp(const unsigned short* roomLoaded, const unsigned short* hitmapLoaded) {
@@ -444,6 +456,7 @@ int loadRoomUp(const unsigned short* roomLoaded, const unsigned short* hitmapLoa
         }
 
     }
+	loadEnemy(room2,3);
 	return 0;
 }
 
@@ -739,11 +752,16 @@ int loadEnemy(Enemies * room, int size)
 {
 	int count = 0;
 	int spritenum = 0;
+	current = room;
+	currentnumber = size;
 	for(count = 0; count < size; count++)
 	{
 		spritenum++;
 		changeAnimation(room[count].enemyType,spritenum);
-		moveSprite(room[count].enemyX, room[count].enemyY, spritenum);
+		mysprites[spritenum].x = room[count].enemyX;
+		mysprites[spritenum].y = room[count].enemyY;
+		mysprites[spritenum].health = 1;
+		mysprites[spritenum].alive = 1;
 		MoveSprite(spritenum);
 	}
 	return 0;
@@ -767,7 +785,11 @@ int runEnemy(Enemies * room, int size)
 			countenemy++;
 	}
 	if(countenemy <= 0)
+	{
 		proceed = 1;
+		if(keyfound)
+			loadvictory();
+	}
 	
 	return 0;
 }
@@ -808,6 +830,7 @@ void easySprites()
 	setSpriteData(26,ghostData);
 	setSpriteData(27,ghostData);
 	
+	setSpriteData(59,keyData);
 	setSpriteData(60,freezeData);
 	setSpriteData(61,hilightData);
 	setSpriteData(62,heartData);
@@ -829,7 +852,7 @@ void easySprites()
 	
 	
 	
-	
+	changeAnimation(59,92);
 	changeAnimation(63,90);
 	changeAnimation(62,91);
 	UpdateSpriteMemory();
@@ -1466,16 +1489,17 @@ int AI_follow(int character, int num)
 
 int insertHeart(int x, int y)
 {
-	if(mysprites[91].alive > 0)
+	if(mysprites[92].alive > 0)
 	{
-		moveSprite(x,y,91);
-		MoveSprite(91);
+		moveSprite(x,y,92);
+		MoveSprite(92);
 		if(abs(x - mysprites[0].x) < 10 && abs(y - mysprites[0].y) < 10)
 		{
 			addHeart(++mysprites[0].health);
-			moveSprite(240,160,91);
-			MoveSprite(91);
-			mysprites[91].alive = 0;
+			moveSprite(240,160,92);
+			MoveSprite(92);
+			mysprites[92].alive = 0;
+			keyfound = 1;
 		}
 	}
 	return 0;

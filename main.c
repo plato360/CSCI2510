@@ -5,6 +5,8 @@ void Initialize(void);
 void LoadContent(void);
 void Update(void);
 void Draw(void);
+void makeEnemy1();
+
 
 int aicount = 0;
 
@@ -44,12 +46,13 @@ void Update() //Detect Button Presses and Update Info
     else if (gameState == STATE_INGAME) {
         runSprite();          //moves sprite accross the screen
 		attackStar(0);
-//		insertHeart(50,50);
+		if(activateheart)
+			insertHeart(99,50);
 		attackFreeze();
 		aicount++;
       if(aicount > 5)
         {
-			runEnemy(roomSprites,10);
+			runEnemy(current,currentnumber);
 		  aicount = 0;
         }
     }
@@ -108,6 +111,26 @@ void makeEnemy1()
 	roomSprites[9].enemyX = 50;
 	roomSprites[9].enemyY = 90;
 	roomSprites[9].enemyType = 1;
+	
+	room1[0].enemyX = 80;
+	room1[0].enemyY = 80;
+	room1[0].enemyType = 1;
+	
+	room1[1].enemyX = 70;
+	room1[1].enemyY = 70;
+	room1[1].enemyType = 2;
+	
+	room2[2].enemyX = 70;
+	room2[2].enemyY = 100;
+	room2[2].enemyType = 1;
+	
+	room2[3].enemyX = 50;
+	room2[3].enemyY = 80;
+	room2[3].enemyType = 2;
+	
+	room2[4].enemyX = 40;
+	room2[4].enemyY = 70;
+	room2[4].enemyType = 3;
 	
 	loadEnemy(roomSprites,10);
 }
