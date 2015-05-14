@@ -23,10 +23,7 @@ void Initialize() //Initializes variables
 {
     gameState = STATE_TITLE;
    	easy();            //located in main.h
-	roomSprites[0].enemyX = 50;
-	roomSprites[0].enemyY = 50;
-	roomSprites[0].enemyType = 3;
-	loadEnemy(roomSprites,1);
+	makeEnemy1();
 }
 
 void LoadContent() //Loads the initial content
@@ -47,22 +44,12 @@ void Update() //Detect Button Presses and Update Info
     else if (gameState == STATE_INGAME) {
         runSprite();          //moves sprite accross the screen
 		attackStar(0);
-		insertHeart(50,50);
+//		insertHeart(50,50);
 		attackFreeze();
-		AI_Patrol(16, 20, 120, 0, 1, 1);
-		AI_Patrol(121, 20, 200, 0, 2, 10);
 		aicount++;
       if(aicount > 5)
         {
-//		  AI_follow(1,2);
-		  AI_follow(1,3);
-		  AI_follow(1,4);
-		  AI_follow(1,5);
-		  AI_follow(1,6);
-		  AI_follow(2,7);
-		  AI_follow(2,8);
-		  AI_follow(2,9);
-			runEnemy(roomSprites,1);
+			runEnemy(roomSprites,10);
 		  aicount = 0;
         }
     }
@@ -80,6 +67,50 @@ void Draw() //Draw updates to the screen
     }
 }
 
+void makeEnemy1()
+{
+	roomSprites[0].enemyX = 50;
+	roomSprites[0].enemyY = 50;
+	roomSprites[0].enemyType = 1;
+	
+	roomSprites[1].enemyX = 60;
+	roomSprites[1].enemyY = 60;
+	roomSprites[1].enemyType = 1;
+	
+	roomSprites[2].enemyX = 70;
+	roomSprites[2].enemyY = 50;
+	roomSprites[2].enemyType = 1;
+	
+	roomSprites[3].enemyX = 80;
+	roomSprites[3].enemyY = 50;
+	roomSprites[3].enemyType = 2;
+	
+	roomSprites[4].enemyX = 50;
+	roomSprites[4].enemyY = 60;
+	roomSprites[4].enemyType = 2;
+	
+	roomSprites[5].enemyX = 50;
+	roomSprites[5].enemyY = 80;
+	roomSprites[5].enemyType = 2;
+	
+	roomSprites[6].enemyX = 80;
+	roomSprites[6].enemyY = 80;
+	roomSprites[6].enemyType = 3;
+	
+	roomSprites[7].enemyX = 90;
+	roomSprites[7].enemyY = 90;
+	roomSprites[7].enemyType = 3;
+	
+	roomSprites[8].enemyX = 90;
+	roomSprites[8].enemyY = 50;
+	roomSprites[8].enemyType = 3;
+	
+	roomSprites[9].enemyX = 50;
+	roomSprites[9].enemyY = 90;
+	roomSprites[9].enemyType = 1;
+	
+	loadEnemy(roomSprites,10);
+}
 
 
 /* END OF FILE */

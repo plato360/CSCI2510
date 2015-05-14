@@ -65,6 +65,7 @@
 
 //---------Sprites.h variables
 
+int proceed = 0;
 int freezenumber = 0;
 int starnumber = 0;
 int attacklimit = 0;
@@ -286,6 +287,7 @@ int loadRoomRight(const unsigned short* roomLoaded, const unsigned short* hitmap
             cy++;
             if (cy > 31)
                 cy = 0;
+			
         }
         chofs += 2;
         WaitVBlank();
@@ -691,11 +693,16 @@ int loadEnemy(Enemies * room, int size)
 int runEnemy(Enemies * room, int size)
 {
 	int count = 0;
+	int countenemy = 0;
 	int spritenum = 0;
 	for(count = 0; count < size; count++)
 	{
 		spritenum++;
-		AI_follow(room[count].enemyType,spritenum++);
+		if(mysprites[spritenum].alive > 0)
+			countenemy++;
+		if(countenemy <= 0)
+			proceed = 1;
+		AI_follow(room[count].enemyType,spritenum);
 	}
 	return 0;
 }
@@ -755,56 +762,6 @@ void easySprites()
 	mysprites[0].health = 10;
 	
 	
-	mysprites[1].x = 0;
-	mysprites[1].y = 20;
-	changeAnimation(7,1);
-	
-	mysprites[2].x = 150;
-	mysprites[2].y = 0;
-	mysprites[2].health = 1;
-	changeAnimation(7,2);
-	
-	mysprites[3].x = 150;
-	mysprites[3].y = 50;
-	mysprites[3].health = 1;
-	changeAnimation(7,3);
-	
-	mysprites[4].x = 100;
-	mysprites[4].y = 100;
-	mysprites[4].health = 1;
-	changeAnimation(7,4);
-	
-	mysprites[5].x = 120;
-	mysprites[5].y = 80;
-	mysprites[5].health = 1;
-	changeAnimation(7,5);
-	
-	mysprites[6].x = 90;
-	mysprites[6].y = 90;
-	mysprites[6].health = 1;
-	changeAnimation(7,6);
-	
-	mysprites[7].x = 80;
-	mysprites[7].y = 80;
-	mysprites[7].health = 1;
-	changeAnimation(7,7);
-	
-	mysprites[8].x = 64;
-	mysprites[8].y = 24;
-	mysprites[8].health = 1;
-	changeAnimation(14,8);
-	
-	mysprites[9].x = 38;
-	mysprites[9].y = 47;
-	mysprites[9].health = 1;
-	changeAnimation(14,9);
-	
-	mysprites[10].x = 91;
-	mysprites[10].y = 86;
-	mysprites[10].health = 1;
-	changeAnimation(14,10);
-	mysprites[3].x = 10;
-	mysprites[3].y = 10;
 	
 	
 	
@@ -1026,7 +983,8 @@ int moveSprite(int x, int y, int num)
     if (x < 0 || y < 0 || x < 240 && (bg04map[ytile*32+xtile] == 5 || bg04map[(ytile+1)*32+xtile] == 5 ||  bg04map[(ytile+2)*32+xtile] == 5 || bg04map[ytile*32+(xtile+1)] == 5 || bg04map[(ytile+1)*32+(xtile+1)] == 5 || bg04map[(ytile+2)*32+(xtile+1)] == 5 || bg04map[ytile*32+(xtile+2)] == 5 || bg04map[(ytile+1)*32+(xtile+2)] == 5 || bg04map[(ytile+2)*32+(xtile+2)] == 5))
         return 0;
 
-    if (num == 0) {
+    if ((num == 0) && (proceed == 1))
+	{
         if (xtile == 0) {
             mysprites[num].x = 208;
             mysprites[num].y = y;
