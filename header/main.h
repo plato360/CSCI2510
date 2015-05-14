@@ -433,6 +433,9 @@ int loadRoomUp(const unsigned short* roomLoaded, const unsigned short* hitmapLoa
         REG_BG1VOFS = cvofs;
         cvnext--;
         cvprev--;
+		mysprites[0].y+=6;
+		MoveSprite(0);
+		UpdateSpriteMemory();
         if (cvnext < 0) {
             cvnext = 31;
         }
@@ -472,6 +475,9 @@ int loadRoomDown(const unsigned short* roomLoaded, const unsigned short* hitmapL
         REG_BG1VOFS = cvofs;
         cvnext++;
         cvprev++;
+		mysprites[0].y-=6;
+		MoveSprite(0);
+		UpdateSpriteMemory();
         if (cvnext > 31) {
             cvnext = 0;
         }
@@ -1060,14 +1066,14 @@ int moveSprite(int x, int y, int num)
         }
         else if (ytile == 0) {
             mysprites[num].x = x;
-            mysprites[num].y = 128;
+         //   mysprites[num].y = 128;
             currentroom = currentroom->roomUp;
             loadRoomUp(currentroom->mapData,currentroom->hitmapData);
             return 0;
         }
         else if (ytile > 17) {
             mysprites[num].x = x;
-            mysprites[num].y = 16;
+          //  mysprites[num].y = 16;
             currentroom = currentroom->roomDown;
             loadRoomDown(currentroom->mapData,currentroom->hitmapData);
             return 0;
