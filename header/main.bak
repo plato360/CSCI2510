@@ -36,6 +36,12 @@
 #include "Backgrounds/menu2/menu2.map.c"
 #include "Backgrounds/menu2/menu2.raw.c"
 
+#include "Backgrounds/victory/victory.pal.c"
+#include "Backgrounds/victory/victory1.map.c"
+#include "Backgrounds/victory/victory1.raw.c"
+#include "Backgrounds/victory/victory2.map.c"
+#include "Backgrounds/victory/victory2.raw.c"
+
 #include "solder.h"
 #include "solder2.h"
 #include "solder3.h"
@@ -64,9 +70,12 @@
 #include "heart.h"
 #include "hilight.h"
 #include "ghost.h"
+#include "key.h"
 
 //---------Sprites.h variables
 
+int activateheart = 0;
+int keyfound = 0;
 int proceed = 0;
 int freezenumber = 0;
 int starnumber = 0;
@@ -155,6 +164,10 @@ typedef struct Enemy{
 } Enemies, *proomSprites;
 
 Enemies roomSprites[50];
+Enemies room1[50];
+Enemies room2[50];
+Enemies * current;
+int currentnumber = 0;
 
 typedef struct rd {
     unsigned short* mapData;
@@ -214,8 +227,32 @@ void loadRoomData() {
     roomData* room4 = (roomData*) malloc(sizeof(roomData));
     room4->spriteData = roomSprites;
     room4->mapData = Room4_Map;
-    room4->hitmapData = Room1hitmap_Map;
+    room4->hitmapData = Room4hitmap_Map;
     room4->numEnemies = 5;
+    
+    roomData* room5 = (roomData*) malloc(sizeof(roomData));
+    room5->spriteData = roomSprites;
+    room5->mapData = Room5_Map;
+    room5->hitmapData = Room5hitmap_Map;
+    room5->numEnemies = 5;
+    
+    roomData* room6 = (roomData*) malloc(sizeof(roomData));
+    room6->spriteData = roomSprites;
+    room6->mapData = Room6_Map;
+    room6->hitmapData = Room6hitmap_Map;
+    room6->numEnemies = 5;
+    
+    roomData* room7 = (roomData*) malloc(sizeof(roomData));
+    room7->spriteData = roomSprites;
+    room7->mapData = Room4_Map;
+    room7->hitmapData = Room7hitmap_Map;
+    room7->numEnemies = 5;
+    
+    roomData* room8 = (roomData*) malloc(sizeof(roomData));
+    room8->spriteData = roomSprites;
+    room8->mapData = Room8_Map;
+    room8->hitmapData = Room8hitmap_Map;
+    room8->numEnemies = 5;
 
     room1->roomLeft = room4;
     room1->roomRight= room2;
@@ -229,13 +266,33 @@ void loadRoomData() {
 
     room3->roomLeft = room3;
     room3->roomRight= room3;
-    room3->roomUp = room3;
+    room3->roomUp = room8;
     room3->roomDown = room2;
 
     room4->roomLeft = room4;
     room4->roomRight= room1;
-    room4->roomUp = room4;
+    room4->roomUp = room5;
     room4->roomDown = room4;
+    
+    room5->roomLeft = room5;
+    room5->roomRight= room5;
+    room5->roomUp = room6;
+    room5->roomDown = room4;
+    
+    room6->roomLeft = room6;
+    room6->roomRight= room7;
+    room6->roomUp = room6;
+    room6->roomDown = room5;
+    
+    room7->roomLeft = room6;
+    room7->roomRight= room8;
+    room7->roomUp = room7;
+    room7->roomDown = room7;
+    
+    room8->roomLeft = room7;
+    room8->roomRight= room8;
+    room8->roomUp = room8;
+    room8->roomDown = room3;
     currentroom = room1;
 }
 
@@ -354,6 +411,7 @@ int loadRoomRight(const unsigned short* roomLoaded, const unsigned short* hitmap
             REG_BG1HOFS = 0;
         }
     }
+	loadEnemy(room1,2);
 	return 0;
 }
 
@@ -386,6 +444,8 @@ int loadRoomLeft(const unsigned short* roomLoaded, const unsigned short* hitmapL
         REG_BG1HOFS = chofs;
         cnext--;
         cprev--;
+		if(keyfound == 0)
+			activateheart = 1;
         mysprites[0].x+=7;
 		MoveSprite(0);
 		UpdateSpriteMemory();
@@ -397,6 +457,8 @@ int loadRoomLeft(const unsigned short* roomLoaded, const unsigned short* hitmapL
         }
 
     }
+	if(keyfound == 0)
+		insertHeart(90,40);
 	return 0;
 }
 int loadRoomUp(const unsigned short* roomLoaded, const unsigned short* hitmapLoaded) {
@@ -427,6 +489,9 @@ int loadRoomUp(const unsigned short* roomLoaded, const unsigned short* hitmapLoa
         REG_BG1VOFS = cvofs;
         cvnext--;
         cvprev--;
+		mysprites[0].y+=6;
+		MoveSprite(0);
+		UpdateSpriteMemory();
         if (cvnext < 0) {
             cvnext = 31;
         }
@@ -435,6 +500,7 @@ int loadRoomUp(const unsigned short* roomLoaded, const unsigned short* hitmapLoa
         }
 
     }
+	loadEnemy(room2,3);
 	return 0;
 }
 
@@ -466,6 +532,9 @@ int loadRoomDown(const unsigned short* roomLoaded, const unsigned short* hitmapL
         REG_BG1VOFS = cvofs;
         cvnext++;
         cvprev++;
+		mysprites[0].y-=6;
+		MoveSprite(0);
+		UpdateSpriteMemory();
         if (cvnext > 31) {
             cvnext = 0;
         }
@@ -727,29 +796,45 @@ int loadEnemy(Enemies * room, int size)
 {
 	int count = 0;
 	int spritenum = 0;
+	current = room;
+	currentnumber = size;
 	for(count = 0; count < size; count++)
 	{
 		spritenum++;
 		changeAnimation(room[count].enemyType,spritenum);
-		moveSprite(room[count].enemyX, room[count].enemyY, spritenum);
+		mysprites[spritenum].x = room[count].enemyX;
+		mysprites[spritenum].y = room[count].enemyY;
+		mysprites[spritenum].health = 1;
+		mysprites[spritenum].alive = 1;
 		MoveSprite(spritenum);
 	}
 	return 0;
 }
 int runEnemy(Enemies * room, int size)
 {
+	proceed = 0;
 	int count = 0;
 	int countenemy = 0;
 	int spritenum = 0;
 	for(count = 0; count < size; count++)
 	{
 		spritenum++;
-		if(mysprites[spritenum].alive > 0)
-			countenemy++;
-		if(countenemy <= 0)
-			proceed = 1;
 		AI_follow(room[count].enemyType,spritenum);
 	}
+	spritenum = 0;
+	for(count = 0; count < size; count++)
+	{
+		spritenum++;
+		if(mysprites[spritenum].alive > 0)
+			countenemy++;
+	}
+	if(countenemy <= 0)
+	{
+		proceed = 1;
+		if(keyfound)
+			loadvictory();
+	}
+	
 	return 0;
 }
 
@@ -789,6 +874,7 @@ void easySprites()
 	setSpriteData(26,ghostData);
 	setSpriteData(27,ghostData);
 	
+	setSpriteData(59,keyData);
 	setSpriteData(60,freezeData);
 	setSpriteData(61,hilightData);
 	setSpriteData(62,heartData);
@@ -810,7 +896,7 @@ void easySprites()
 	
 	
 	
-	
+	changeAnimation(59,92);
 	changeAnimation(63,90);
 	changeAnimation(62,91);
 	UpdateSpriteMemory();
@@ -1047,14 +1133,14 @@ int moveSprite(int x, int y, int num)
         }
         else if (ytile == 0) {
             mysprites[num].x = x;
-            mysprites[num].y = 128;
+         //   mysprites[num].y = 128;
             currentroom = currentroom->roomUp;
             loadRoomUp(currentroom->mapData,currentroom->hitmapData);
             return 0;
         }
         else if (ytile > 17) {
             mysprites[num].x = x;
-            mysprites[num].y = 16;
+          //  mysprites[num].y = 16;
             currentroom = currentroom->roomDown;
             loadRoomDown(currentroom->mapData,currentroom->hitmapData);
             return 0;
@@ -1447,16 +1533,17 @@ int AI_follow(int character, int num)
 
 int insertHeart(int x, int y)
 {
-	if(mysprites[91].alive > 0)
+	if(mysprites[92].alive > 0)
 	{
-		moveSprite(x,y,91);
-		MoveSprite(91);
+		moveSprite(x,y,92);
+		MoveSprite(92);
 		if(abs(x - mysprites[0].x) < 10 && abs(y - mysprites[0].y) < 10)
 		{
 			addHeart(++mysprites[0].health);
-			moveSprite(240,160,91);
-			MoveSprite(91);
-			mysprites[91].alive = 0;
+			moveSprite(240,160,92);
+			MoveSprite(92);
+			mysprites[92].alive = 0;
+			keyfound = 1;
 		}
 	}
 	return 0;
@@ -1471,7 +1558,49 @@ int attackFreeze()
 	return 0;
 }
 
+void loadvictory()
+{
+	int countx = 0;
+	int county = 0;
+	
+	REG_BG0CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(2 << SCREEN_SHIFT) | 0x0;
+	REG_BG1CNT = BG_COLOR256 | TEXTBG_SIZE_256x256 |(10 << SCREEN_SHIFT) | 0x4;
+	
+	DMAFastCopy((void*)victory_Palette, (void*)BGPaletteMem,256, DMA_16NOW);
+	DMAFastCopy((void*)victory1_Tiles, (void*)CharBaseBlock(0),768, DMA_32NOW);
+	DMAFastCopy((void*)victory2_Tiles, (void*)CharBaseBlock(1),128, DMA_32NOW);
+	
+	for(county = 0; county <32; county++)
+	{
+		for(countx = 0; countx < 32; countx++)
+		{
+			MapData1[countx + county*32] = 0;
+		}
+	}
 
+
+    for(county = 0; county <20; county++)
+	{
+		for(countx = 0; countx < 30; countx++)
+		{
+			MapData1[countx + county*32] = victory2_Map[countx+county*30];
+		}
+	}
+	
+    DMAFastCopy((void*)MapData1, (void*)bgm1map, 512, DMA_32NOW);
+	
+	for(county = 0; county <20; county++)
+	{
+		for(countx = 0; countx < 30; countx++)
+		{
+			MapData1[countx + county*32] = victory1_Map[countx+county*30];
+		}
+	}
+	
+    DMAFastCopy((void*)MapData1, (void*)bgm0map, 512, DMA_32NOW);
+	
+
+}
 
 
 /*
