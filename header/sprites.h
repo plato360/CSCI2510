@@ -25,6 +25,7 @@
 #include "star.h"
 #include "heart.h"
 #include "hilight.h"
+#include "ghost.h"
 
 
 
@@ -107,7 +108,44 @@ typedef struct sprite
 
 }spriteHandle;
 
+
+typedef struct Enemy{
+    int numEnemies;
+    int enemyType;
+    int enemyX;
+    int enemyY;
+} Enemies, *proomSprites;
+
+Enemies roomSprites[50];
+
+
 spriteHandle mysprites[128];
+
+
+int loadEnemy(Enemies * room, int size)
+{
+	int count = 0;
+	int spritenum = 0;
+	for(count = 0; count < size; count++)
+	{
+		spritenum++;
+		changeAnimation(room[count].enemyType,spritenum);
+		moveSprite(room[count].enemyX, room[count].enemyY, spritenum);
+		MoveSprite(spritenum);
+	}
+	return 0;
+}
+int runEnemy(Enemies * room, int size)
+{
+	int count = 0;
+	int spritenum = 0;
+	for(count = 0; count < size; count++)
+	{
+		spritenum++;
+		AI_follow(room[count].enemyType,spritenum++);
+	}
+	return 0;
+}
 
 void easySprites()
 {
@@ -137,6 +175,14 @@ void easySprites()
 	setSpriteData(19,villan35Data);
 	setSpriteData(20,villan36Data);
 	
+	setSpriteData(21,ghostData);
+	setSpriteData(22,ghostData);
+	setSpriteData(23,ghostData);
+	setSpriteData(24,ghostData);
+	setSpriteData(25,ghostData);
+	setSpriteData(26,ghostData);
+	setSpriteData(27,ghostData);
+	
 	setSpriteData(60,freezeData);
 	setSpriteData(61,hilightData);
 	setSpriteData(62,heartData);
@@ -150,12 +196,16 @@ void easySprites()
 		sprites[count].attribute2 = (((3)&3)<<10);
 		
 	}
+	
 	mysprites[0].x = 40;
 	mysprites[0].y = 40;
 	mysprites[0].health = 10;
+	
+	/*
 	mysprites[1].x = 0;
 	mysprites[1].y = 20;
 	changeAnimation(7,1);
+	
 	mysprites[2].x = 150;
 	mysprites[2].y = 0;
 	mysprites[2].health = 1;
@@ -200,12 +250,13 @@ void easySprites()
 	mysprites[10].y = 86;
 	mysprites[10].health = 1;
 	changeAnimation(14,10);
+	mysprites[3].x = 10;
+	mysprites[3].y = 10;
+	*/
 	
 	
 	changeAnimation(63,90);
 	changeAnimation(62,91);
-	mysprites[3].x = 10;
-	mysprites[3].y = 10;
 	UpdateSpriteMemory();
 	
 }
