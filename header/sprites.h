@@ -32,7 +32,9 @@
 
 
 
-
+int freezenumber = 0;
+int starnumber = 0;
+int attacklimit = 0;
 int ltest = 0;
 int bItem = 0;
 int checka = 0;
@@ -201,7 +203,7 @@ void easySprites()
 	mysprites[0].y = 40;
 	mysprites[0].health = 10;
 	
-	/*
+	
 	mysprites[1].x = 0;
 	mysprites[1].y = 20;
 	changeAnimation(7,1);
@@ -252,7 +254,7 @@ void easySprites()
 	changeAnimation(14,10);
 	mysprites[3].x = 10;
 	mysprites[3].y = 10;
-	*/
+	
 	
 	
 	changeAnimation(63,90);
@@ -317,6 +319,8 @@ void UpdateSpriteMemory()
 
 void runSprite()
 {
+	if(attacklimit < 100)
+		attacklimit++;
     CheckButtons();
 	if(mysprites[0].alive > 0)
 	{
@@ -328,14 +332,16 @@ void runSprite()
                moveSprite(mysprites[0].x + 1, mysprites[0].y - 1, 0);
         }
 	
-		if(Pressed(BUTTON_A))
+		if(Pressed(BUTTON_A) && (attacklimit > 50))
 		{
+			attacklimit = 0;
 			if (checka < 1)
 				animationHolder = mysprites[0].animation;
 			checka = 1;
 			attack2(0);
+			
 		}
-		else if( checka > 0)
+		else if( (attacklimit > 50) && checka > 0)
 		{
 			checka = 0;
 			changeAnimation(animationHolder,0);
@@ -345,10 +351,17 @@ void runSprite()
 		{
 			if(bItem%2 == 0)
 			{
-				attackStarCheck = 1;
+				if(starnumber < 3)
+				{
+					if(attackStarCheck == 0)
+						starnumber++;
+					attackStarCheck = 1;
+				}
 			}
-			else
+			else if(freezenumber < 3)
 			{
+				if(freeze == 0)
+					freezenumber++;
 				freeze = 200;
 			}
 		}
@@ -501,11 +514,15 @@ int attack2(int num)
     for (attack2count = 1; attack2count < 90; attack2count++)
     {
         if(abs(mysprites[attack2count].x - mysprites[0].x) < 18 && abs(mysprites[attack2count].y - mysprites[0].y) < 18)
-            mysprites[attack2count].health--;
-        if(mysprites[attack2count].health < 0)
-            mysprites[attack2count].alive = -1;
+        {
+			mysprites[attack2count].health--;
+			if(mysprites[attack2count].health <= 0)
+				mysprites[attack2count].alive = -1;
+			attack2count = 1000;
+		}
     }
     wack();
+	UpdateSpriteMemory();
     return 0;
 }
 int attackStar(int num)
