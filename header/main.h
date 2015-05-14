@@ -23,10 +23,6 @@
 #include "Backgrounds/Room2.map.c"
 #include "Backgrounds/Room3.map.c"
 #include "Backgrounds/Room4.map.c"
-#include "Backgrounds/Room5.map.c"
-#include "Backgrounds/Room6.map.c"
-#include "Backgrounds/Room7.map.c"
-#include "Backgrounds/Room8.map.c"
 #include "Backgrounds/Room1.raw.c"
 #include "Backgrounds/Room1hitmap.map.c"
 #include "Backgrounds/Room1hitmap.raw.c"
@@ -233,30 +229,6 @@ void loadRoomData() {
     room4->mapData = Room4_Map;
     room4->hitmapData = Room4hitmap_Map;
     room4->numEnemies = 5;
-    
-    roomData* room5 = (roomData*) malloc(sizeof(roomData));
-    room5->spriteData = roomSprites;
-    room5->mapData = Room5_Map;
-    room5->hitmapData = Room5hitmap_Map;
-    room5->numEnemies = 5;
-    
-    roomData* room6 = (roomData*) malloc(sizeof(roomData));
-    room6->spriteData = roomSprites;
-    room6->mapData = Room6_Map;
-    room6->hitmapData = Room6hitmap_Map;
-    room6->numEnemies = 5;
-    
-    roomData* room7 = (roomData*) malloc(sizeof(roomData));
-    room7->spriteData = roomSprites;
-    room7->mapData = Room4_Map;
-    room7->hitmapData = Room7hitmap_Map;
-    room7->numEnemies = 5;
-    
-    roomData* room8 = (roomData*) malloc(sizeof(roomData));
-    room8->spriteData = roomSprites;
-    room8->mapData = Room8_Map;
-    room8->hitmapData = Room8hitmap_Map;
-    room8->numEnemies = 5;
 
     room1->roomLeft = room4;
     room1->roomRight= room2;
@@ -270,33 +242,13 @@ void loadRoomData() {
 
     room3->roomLeft = room3;
     room3->roomRight= room3;
-    room3->roomUp = room8;
+    room3->roomUp = room3;
     room3->roomDown = room2;
 
     room4->roomLeft = room4;
     room4->roomRight= room1;
-    room4->roomUp = room5;
+    room4->roomUp = room4;
     room4->roomDown = room4;
-    
-    room5->roomLeft = room5;
-    room5->roomRight= room5;
-    room5->roomUp = room6;
-    room5->roomDown = room4;
-    
-    room6->roomLeft = room6;
-    room6->roomRight= room7;
-    room6->roomUp = room6;
-    room6->roomDown = room5;
-    
-    room7->roomLeft = room6;
-    room7->roomRight= room8;
-    room7->roomUp = room7;
-    room7->roomDown = room7;
-    
-    room8->roomLeft = room7;
-    room8->roomRight= room8;
-    room8->roomUp = room8;
-    room8->roomDown = room3;
     currentroom = room1;
 }
 
@@ -420,7 +372,6 @@ int loadRoomRight(const unsigned short* roomLoaded, const unsigned short* hitmap
 }
 
 int loadRoomLeft(const unsigned short* roomLoaded, const unsigned short* hitmapLoaded) {
-
     int loop, loopy;
     int cy;
     for (loop = 29; loop >= 0; loop--) {
@@ -1119,8 +1070,10 @@ int moveSprite(int x, int y, int num)
     if (x < 0 || y < 0 || x < 240 && (bg04map[ytile*32+xtile] == 5 || bg04map[(ytile+1)*32+xtile] == 5 ||  bg04map[(ytile+2)*32+xtile] == 5 || bg04map[ytile*32+(xtile+1)] == 5 || bg04map[(ytile+1)*32+(xtile+1)] == 5 || bg04map[(ytile+2)*32+(xtile+1)] == 5 || bg04map[ytile*32+(xtile+2)] == 5 || bg04map[(ytile+1)*32+(xtile+2)] == 5 || bg04map[(ytile+2)*32+(xtile+2)] == 5))
         return 0;
 
-    if ((num == 0) && (proceed == 1))
+    if ((num == 0) && (proceed == 1) && (attackStarCheck == 0))
 	{
+		insertHeart(240,160);
+
         if (xtile == 0) {
             //mysprites[num].x = 208;
             mysprites[num].y = y;

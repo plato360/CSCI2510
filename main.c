@@ -120,17 +120,17 @@ void makeEnemy1()
 	room1[1].enemyY = 70;
 	room1[1].enemyType = 2;
 	
-	room2[2].enemyX = 70;
-	room2[2].enemyY = 100;
-	room2[2].enemyType = 1;
+	room2[0].enemyX = 70;
+	room2[0].enemyY = 100;
+	room2[0].enemyType = 1;
 	
-	room2[3].enemyX = 50;
-	room2[3].enemyY = 80;
-	room2[3].enemyType = 2;
+	room2[1].enemyX = 50;
+	room2[1].enemyY = 80;
+	room2[1].enemyType = 2;
 	
-	room2[4].enemyX = 40;
-	room2[4].enemyY = 70;
-	room2[4].enemyType = 3;
+	room2[2].enemyX = 40;
+	room2[2].enemyY = 70;
+	room2[2].enemyType = 3;
 	
 	loadEnemy(roomSprites,10);
 }
